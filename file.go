@@ -10,7 +10,6 @@ import (
 func readFileContents(path string) (*Container, error) {
 	file, err := os.Open(path)
 	if err != nil {
-		log.Fatal(err)
 		return nil, err
 	}
 	defer file.Close()
