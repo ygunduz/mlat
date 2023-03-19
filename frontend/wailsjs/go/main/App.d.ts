@@ -3,3 +3,5 @@
 import {main} from '../models';
 
 export function SelectFile():Promise<main.Container>;
+
+export function UpdateReceiver(arg1:main.Receiver):Promise<main.Container>;

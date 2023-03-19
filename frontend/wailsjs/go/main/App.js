@@ -5,3 +5,7 @@
 export function SelectFile() {
   return window['go']['main']['App']['SelectFile']();
 }
+
+export function UpdateReceiver(arg1) {
+  return window['go']['main']['App']['UpdateReceiver'](arg1);
+}

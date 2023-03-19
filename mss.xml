@@ -350,9 +350,9 @@
 				</Site>
 				<Site id="RXA00">
 					<Description>S00_TWR</Description>
-					<Latitude>36.89446562</Latitude>
-					<Longitude>30.79767556</Longitude>
-					<Height>130.524</Height>
+					<Latitude>36.89446561</Latitude>
+					<Longitude>29.79767552</Longitude>
+					<Height>130.523</Height>
 				</Site>
 				<Site id="RXA01">
 					<Description>S01_LP_214</Description>
@@ -554,10 +554,10 @@
 						<DataLink>
 							<Dual>
 								<A>
-									<AddDelaySSR>0.0</AddDelaySSR>
+									<AddDelaySSR>2.454</AddDelaySSR>
 								</A>
 								<B>
-									<AddDelaySSR>0.0</AddDelaySSR>
+									<AddDelaySSR>5.875</AddDelaySSR>
 								</B>
 							</Dual>
 						</DataLink>
@@ -50193,7 +50193,7 @@
 						<ParametersCount>4</ParametersCount>
 						<AllowAditionalParameters>true</AllowAditionalParameters>
 						<Exec>
-							<CmdLine>shutdown /r /t 30 /c &quot;Restart invoked by MSS management (server:$(1) terminal:$(2) user:$(3) time:$(4))&quot; /f /d 4:1</CmdLine>
+							<CmdLine>shutdown /r /t 30 /c "Restart invoked by MSS management (server:$(1) terminal:$(2) user:$(3) time:$(4))" /f /d 4:1</CmdLine>
 						</Exec>
 					</Command>
 					<Command id="lib-restart-sw">
@@ -53695,25 +53695,25 @@
 					<Script id="sw-tp-start-app">
 						<Command>
 							<Name>start-app</Name>
-							<Param>c:\windows\system32\net START &quot;ERA PCP TP&quot;</Param>
+							<Param>c:\windows\system32\net START "ERA PCP TP"</Param>
 						</Command>
 					</Script>
 					<Script id="sw-tp-stop-app">
 						<Command>
 							<Name>start-app</Name>
-							<Param>c:\windows\system32\net STOP &quot;ERA PCP TP&quot;</Param>
+							<Param>c:\windows\system32\net STOP "ERA PCP TP"</Param>
 						</Command>
 					</Script>
 					<Script id="sw-ms-start-app">
 						<Command>
 							<Name>start-app</Name>
-							<Param>c:\windows\system32\net START &quot;ERA PCP MS&quot;</Param>
+							<Param>c:\windows\system32\net START "ERA PCP MS"</Param>
 						</Command>
 					</Script>
 					<Script id="sw-ms-stop-app">
 						<Command>
 							<Name>start-app</Name>
-							<Param>c:\windows\system32\net STOP &quot;ERA PCP MS&quot;</Param>
+							<Param>c:\windows\system32\net STOP "ERA PCP MS"</Param>
 						</Command>
 					</Script>
 					<Script id="sw-tp-start">
