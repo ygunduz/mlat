@@ -5,6 +5,7 @@ type Container struct {
 	Receivers    []Receiver    `json:"receivers"`
 	Transmitters []Transmitter `json:"transmitters"`
 	Transponders []Transponder `json:"transponders"`
+	DataChannels []DataChannel `json:"dataChannels"`
 }
 
 type Site struct {
@@ -24,25 +25,49 @@ type Receiver struct {
 }
 
 type Transmitter struct {
-	Id               string      `json:"id"`
-	SiteId           string      `json:"siteId"`
-	TXLUId           string      `json:"txluId"`
-	ModeSAddress     string      `json:"modeSAddress"`
-	CoveredReceivers []*Receiver `json:"coveredReceivers"`
-	Site             *Site       `json:"site"`
-	CoveredAreaId    string      `json:"coveredAreaId"`
+	Id               string `json:"id"`
+	SiteId           string `json:"siteId"`
+	TXLUId           string `json:"txluId"`
+	ModeSAddress     string `json:"modeSAddress"`
+	CoveredReceivers string `json:"coveredReceivers"`
+	Site             *Site  `json:"site"`
+	CoveredAreaId    string `json:"coveredAreaId"`
 }
 
 type Transponder struct {
-	Id               string      `json:"id"`
-	SiteId           string      `json:"siteId"`
-	ModeSAddress     string      `json:"modeSAddress"`
-	Diag             Diag        `json:"diag"`
-	CoveredReceivers []*Receiver `json:"coveredReceivers"`
-	Site             *Site       `json:"site"`
+	Id               string `json:"id"`
+	SiteId           string `json:"siteId"`
+	ModeSAddress     string `json:"modeSAddress"`
+	Diag             Diag   `json:"diag"`
+	CoveredReceivers string `json:"coveredReceivers"`
+	Site             *Site  `json:"site"`
 }
 
 type Diag struct {
 	Height float64 `json:"height"`
 	Info   string  `json:"info"`
+}
+
+type UpdateDataChannel struct {
+	Id    string            `json:"id"`
+	Items []KeyValueBoolean `json:"items"`
+}
+
+type KeyValueBoolean struct {
+	Key   string `json:"key"`
+	Value bool   `json:"value"`
+}
+
+type DataChannel struct {
+	Id          string            `json:"id"`
+	DataChannel []DataChannelItem `json:"items"`
+}
+
+type DataChannelItem struct {
+	Enabled    byte   `json:"enabled"`
+	ReceiverId string `json:"receiverId"`
+}
+
+type Settings struct {
+	LightSpeed float64 `json:"lightSpeed" xml:"LightSpeed"`
 }

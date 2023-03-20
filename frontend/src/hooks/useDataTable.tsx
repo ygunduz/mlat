@@ -2,17 +2,18 @@ import {useEffect, useMemo, useState} from "react";
 import {FilterMatchMode} from "primereact/api";
 import {useResizeListener} from "primereact/hooks";
 import {InputText} from "primereact/inputtext";
+import {InputNumber} from "primereact/inputnumber";
 
 export const useDataTable = () => {
     const [globalFilterValue, setGlobalFilterValue] = useState('');
     const [filters, setFilters] = useState({
         global: {value: null, matchMode: FilterMatchMode.CONTAINS},
     });
-    const [scrollHeight, setScrollHeight] = useState(window.innerHeight - 110 + 'px');
+    const [scrollHeight, setScrollHeight] = useState(window.innerHeight - 106 + 'px');
     const [bindWindowResizeListener, unbindWindowResizeListener] = useResizeListener({
         listener: (event) => {
             // @ts-ignore
-            setScrollHeight(event.currentTarget.innerHeight - 110 + 'px');
+            setScrollHeight(event.currentTarget.innerHeight - 106 + 'px');
         }
     });
 
@@ -47,8 +48,9 @@ export const useDataTable = () => {
     };
 
     const numberEditor = (options) => {
-        return <InputText style={{height: '35px'}} type="number" value={options.value}
-                          onChange={(e) => options.editorCallback(Number(e.target.value))}/>;
+        return <InputNumber style={{height: '35px'}} value={options.value} minFractionDigits={2}
+                            maxFractionDigits={10} locale="en-US"
+                            onChange={(e) => options.editorCallback(e.value)}/>;
     };
 
     const header = useMemo(() => renderHeader(), [globalFilterValue, onGlobalFilterChange]);

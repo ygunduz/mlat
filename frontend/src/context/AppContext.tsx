@@ -1,12 +1,15 @@
-import {createContext, useContext, useReducer, ReactNode, useRef, RefObject, useMemo} from "react";
+import {createContext, useContext, useReducer, ReactNode, useRef, useMemo, useEffect} from "react";
 import {Toast as PRToast} from "primereact/toast";
 import {Toast} from "../helpers/Toast";
 import {main} from "../../wailsjs/go/models";
+import {GetSettings} from "../../wailsjs/go/main/App";
 import Container = main.Container;
 import Site = main.Site;
 import Receiver = main.Site;
 import Transmitter = main.Site;
 import Transponder = main.Site;
+import Settings = main.Settings;
+import DataChannel = main.DataChannel;
 
 interface IAppContext {
     loading: boolean,
@@ -17,6 +20,9 @@ interface IAppContext {
     transmitters: Transmitter[] | undefined,
     transponders: Transponder[] | undefined,
     sites: Site[] | undefined,
+    dataChannels: DataChannel[] | undefined,
+    settings: Settings | undefined,
+    setSettings: (settings: Settings) => void,
     toast: Toast
 }
 
@@ -33,11 +39,24 @@ export const AppProvider = ({children}: IyzicoProviderProps) => {
         (prev: any, next: any) => {
             return {...prev, ...next};
         },
-        {loading: false, contentLoaded: false}
+        {loading: true, contentLoaded: false}
     );
+
+    useEffect(() => {
+        GetSettings().then(settings => {
+            updateValue({settings, loading: false});
+        }).catch(err => {
+            toast.showError(err);
+            setLoading(false);
+        });
+    }, []);
 
     const setLoading = (loading: boolean) => {
         updateValue({loading});
+    }
+
+    const setSettings = (settings: Settings) => {
+        updateValue({settings, loading: false});
     }
 
     const setContentLoaded = (container: Container) => {
@@ -47,7 +66,8 @@ export const AppProvider = ({children}: IyzicoProviderProps) => {
             receivers: container.receivers,
             transmitters: container.transmitters,
             transponders: container.transponders,
-            sites: container.sites
+            sites: container.sites,
+            dataChannels: container.dataChannels
         });
     }
 
@@ -59,8 +79,11 @@ export const AppProvider = ({children}: IyzicoProviderProps) => {
             transmitters: values.transmitters,
             transponders: values.transponders,
             sites: values.sites,
+            settings: values.settings,
+            dataChannels: values.dataChannels,
             setContentLoaded,
             setLoading,
+            setSettings,
             toast
         }}>
             <PRToast ref={ref}/>
@@ -72,7 +95,7 @@ export const AppProvider = ({children}: IyzicoProviderProps) => {
 export const useAppContext = () => {
     const context = useContext(AppContext);
     if (context === null) {
-        throw new Error("useIyzico must be used within a IyzicoProvider");
+        throw new Error("useAppContext must be used within a AppProvider");
     }
     return context;
 }

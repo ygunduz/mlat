@@ -4,7 +4,8 @@ import App from './App'
 import {AppProvider} from "./context/AppContext";
 
 //theme
-import "primereact/resources/themes/lara-light-purple/theme.css";
+// import "primereact/resources/themes/lara-light-purple/theme.css";
+import "primereact/resources/themes/rhea/theme.css";
 //core
 import "primereact/resources/primereact.min.css";
 //icons

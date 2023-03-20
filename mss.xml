@@ -274,7 +274,7 @@
 			<Identifier>@id</Identifier>
 		</Reference>
 		<Reference type="transmitter">
-			<Path>!set/Deployment/Transmitters/Transmitter</Path>
+			<Path>!set/Deployment/TransmitterTransponder/Transmitter</Path>
 			<Identifier>@id</Identifier>
 		</Reference>
 		<Reference type="area">
@@ -350,8 +350,8 @@
 				</Site>
 				<Site id="RXA00">
 					<Description>S00_TWR</Description>
-					<Latitude>36.89446561</Latitude>
-					<Longitude>29.79767552</Longitude>
+					<Latitude>36.895</Latitude>
+					<Longitude>29.794</Longitude>
 					<Height>130.523</Height>
 				</Site>
 				<Site id="RXA01">
@@ -494,9 +494,9 @@
 				</Site>
 				<Site id="TXA00">
 					<Description>S00_LP</Description>
-					<Latitude>36.8942</Latitude>
-					<Longitude>30.79491111</Longitude>
-					<Height>92.149</Height>
+					<Latitude>36.8941</Latitude>
+					<Longitude>30.79491112</Longitude>
+					<Height>92.143</Height>
 				</Site>
 				<Site id="TXA01">
 					<Description>S01_LP_214</Description>
@@ -536,9 +536,9 @@
 				</Site>
 				<Site id="RMTRA00">
 					<Description>S19_JM</Description>
-					<Latitude>36.90224559</Latitude>
-					<Longitude>30.79168441</Longitude>
-					<Height>89.597</Height>
+					<Latitude>36.90224551</Latitude>
+					<Longitude>30.79168442</Longitude>
+					<Height>89.593</Height>
 				</Site>
 				<Site id="RMTRA01">
 					<Description>S13_OLD_TWR</Description>
@@ -554,10 +554,10 @@
 						<DataLink>
 							<Dual>
 								<A>
-									<AddDelaySSR>2.454</AddDelaySSR>
+									<AddDelaySSR>2.452</AddDelaySSR>
 								</A>
 								<B>
-									<AddDelaySSR>5.875</AddDelaySSR>
+									<AddDelaySSR>5.871</AddDelaySSR>
 								</B>
 							</Dual>
 						</DataLink>
@@ -869,13 +869,12 @@
 						<ModeSAddress>4BF0A5</ModeSAddress>
 						<CoveredReceivers>
 							<ReceiverId>rx00</ReceiverId>
-							<ReceiverId>rx02</ReceiverId>
 							<ReceiverId>rx03</ReceiverId>
-							<ReceiverId>rx06</ReceiverId>
+							<ReceiverId>rx04</ReceiverId>
 							<ReceiverId>rx11</ReceiverId>
 							<ReceiverId>rx12</ReceiverId>
 							<ReceiverId>rx13</ReceiverId>
-							<ReceiverId>rx19</ReceiverId>
+							<ReceiverId>rx14</ReceiverId>
 						</CoveredReceivers>
 						<CoveredAreaId>aTX00</CoveredAreaId>
 					</Transmitter>
@@ -902,9 +901,6 @@
 							<ReceiverId>rx00</ReceiverId>
 							<ReceiverId>rx01</ReceiverId>
 							<ReceiverId>rx03</ReceiverId>
-							<ReceiverId>rx06</ReceiverId>
-							<ReceiverId>rx07</ReceiverId>
-							<ReceiverId>rx08</ReceiverId>
 							<ReceiverId>rx09</ReceiverId>
 							<ReceiverId>rx10</ReceiverId>
 							<ReceiverId>rx11</ReceiverId>
@@ -970,17 +966,12 @@
 						<ModeSAddress>4BF0AB</ModeSAddress>
 						<CoveredReceivers>
 							<ReceiverId>rx00</ReceiverId>
-							<ReceiverId>rx02</ReceiverId>
 							<ReceiverId>rx04</ReceiverId>
 							<ReceiverId>rx05</ReceiverId>
 							<ReceiverId>rx12</ReceiverId>
 							<ReceiverId>rx13</ReceiverId>
-							<ReceiverId>rx15</ReceiverId>
-							<ReceiverId>rx16</ReceiverId>
 							<ReceiverId>rx18</ReceiverId>
 							<ReceiverId>rx19</ReceiverId>
-							<ReceiverId>rx20</ReceiverId>
-							<ReceiverId>rx21</ReceiverId>
 							<ReceiverId>rx22</ReceiverId>
 							<ReceiverId>rx23</ReceiverId>
 						</CoveredReceivers>
@@ -993,7 +984,8 @@
 						<ModeSAddress>4BF0AC</ModeSAddress>
 						<CoveredReceivers>
 							<ReceiverId>rx00</ReceiverId>
-							<ReceiverId>rx04</ReceiverId>
+							<ReceiverId>rx01</ReceiverId>
+							<ReceiverId>rx02</ReceiverId>
 							<ReceiverId>rx05</ReceiverId>
 							<ReceiverId>rx06</ReceiverId>
 							<ReceiverId>rx08</ReceiverId>
@@ -6744,7 +6736,7 @@
 							<ReceiverId>rx01</ReceiverId>
 						</DataChannel>
 						<DataChannel>
-							<Enabled>1</Enabled>
+							<Enabled>0</Enabled>
 							<MUChannel>2</MUChannel>
 							<ReceiverId>rx02</ReceiverId>
 						</DataChannel>
@@ -6769,7 +6761,7 @@
 							<ReceiverId>rx06</ReceiverId>
 						</DataChannel>
 						<DataChannel>
-							<Enabled>0</Enabled>
+							<Enabled>1</Enabled>
 							<MUChannel>7</MUChannel>
 							<ReceiverId>rx07</ReceiverId>
 						</DataChannel>
@@ -7187,7 +7179,7 @@
 							<ReceiverId>rx01</ReceiverId>
 						</DataChannel>
 						<DataChannel>
-							<Enabled>1</Enabled>
+							<Enabled>0</Enabled>
 							<MUChannel>2</MUChannel>
 							<ReceiverId>rx02</ReceiverId>
 						</DataChannel>
@@ -7212,7 +7204,7 @@
 							<ReceiverId>rx06</ReceiverId>
 						</DataChannel>
 						<DataChannel>
-							<Enabled>0</Enabled>
+							<Enabled>1</Enabled>
 							<MUChannel>7</MUChannel>
 							<ReceiverId>rx07</ReceiverId>
 						</DataChannel>
@@ -23272,7 +23264,7 @@
 							</Value>
 						</Rule>
 						<Rule id="rul_TxsRedundancy">
-							<Description>Transmitters redundancy evaluation</Description>
+							<Description>TransmitterTransponder redundancy evaluation</Description>
 							<Value>
 								<fce>
 									<name>Redundancy</name>
@@ -51585,7 +51577,7 @@
 						<Item id="OUT.TEST.port">Port[@id='port-out-test']</Item>
 					</Branch>
 					<Branch>
-						<Path>!set/Deployment/Transmitters</Path>
+						<Path>!set/Deployment/TransmitterTransponder</Path>
 						<Item id="TXLU00.ModeS.Address">Transmitter[@id='tx00']/ModeSAddress</Item>
 						<Item id="TXLU01.ModeS.Address">Transmitter[@id='tx01']/ModeSAddress</Item>
 						<Item id="TXLU02.ModeS.Address">Transmitter[@id='tx02']/ModeSAddress</Item>
@@ -59102,7 +59094,7 @@
 							<Branch>
 								<Path>!set/Deployment</Path>
 								<MultipleItem id="ModeSAddressTransponders">Transponders/Transponder/ModeSAddress</MultipleItem>
-								<MultipleItem id="ModeSAddressTransmitters">Transmitters/Transmitter/ModeSAddress</MultipleItem>
+								<MultipleItem id="ModeSAddressTransmitters">TransmitterTransponder/Transmitter/ModeSAddress</MultipleItem>
 								<MultipleItem id="ModeSAddressSiteMonitors">SiteMonitors/SiteMonitor/ModeSAddress</MultipleItem>
 								<MultipleItem id="ModeSAddressNonTransponders">NonTransponders/NonTransponder/ModeSAddress</MultipleItem>
 							</Branch>
