@@ -543,7 +543,7 @@
 				<Site id="RMTRA01">
 					<Description>S13_OLD_TWR</Description>
 					<Latitude>36.90878707</Latitude>
-					<Longitude>30.80003390</Longitude>
+					<Longitude>30.8000339</Longitude>
 					<Height>120.088</Height>
 				</Site>
 			</Sites>
@@ -983,7 +983,6 @@
 						<SiteId>RMTRA00</SiteId>
 						<ModeSAddress>4BF0AC</ModeSAddress>
 						<CoveredReceivers>
-							<ReceiverId>rx00</ReceiverId>
 							<ReceiverId>rx01</ReceiverId>
 							<ReceiverId>rx02</ReceiverId>
 							<ReceiverId>rx05</ReceiverId>
@@ -1007,7 +1006,6 @@
 						<SiteId>RMTRA01</SiteId>
 						<ModeSAddress>4BF0AD</ModeSAddress>
 						<CoveredReceivers>
-							<ReceiverId>rx00</ReceiverId>
 							<ReceiverId>rx02</ReceiverId>
 							<ReceiverId>rx04</ReceiverId>
 							<ReceiverId>rx05</ReceiverId>
@@ -6726,7 +6724,7 @@
 				<DataProcessing id="TP1-OPE">
 					<DataChannels>
 						<DataChannel>
-							<Enabled>1</Enabled>
+							<Enabled>0</Enabled>
 							<MUChannel>0</MUChannel>
 							<ReceiverId>rx00</ReceiverId>
 						</DataChannel>
@@ -7169,7 +7167,7 @@
 				<DataProcessing id="TP2-OPE">
 					<DataChannels>
 						<DataChannel>
-							<Enabled>1</Enabled>
+							<Enabled>0</Enabled>
 							<MUChannel>0</MUChannel>
 							<ReceiverId>rx00</ReceiverId>
 						</DataChannel>

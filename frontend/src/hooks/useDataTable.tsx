@@ -9,11 +9,11 @@ export const useDataTable = () => {
     const [filters, setFilters] = useState({
         global: {value: null, matchMode: FilterMatchMode.CONTAINS},
     });
-    const [scrollHeight, setScrollHeight] = useState(window.innerHeight - 106 + 'px');
+    const [scrollHeight, setScrollHeight] = useState(window.innerHeight - 110 + 'px');
     const [bindWindowResizeListener, unbindWindowResizeListener] = useResizeListener({
         listener: (event) => {
             // @ts-ignore
-            setScrollHeight(event.currentTarget.innerHeight - 106 + 'px');
+            setScrollHeight(event.currentTarget.innerHeight - 110 + 'px');
         }
     });
 

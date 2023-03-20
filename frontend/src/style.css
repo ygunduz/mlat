@@ -36,3 +36,24 @@ body {
 .p-multiselect-filter-container input {
     height: 35px;
 }
+
+.map-toolbar-button:hover {
+    background-color: rgba(255, 252, 252, 0.1);
+    color: #fff;
+    fill: #fff;
+    background: #48b;
+    border-color: #aef;
+    box-shadow: 0 0 8px #fff;
+}
+
+.map-toolbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 300px;
+    z-index: 1000;
+    background-color: rgba(255, 252, 252, 0.1);
+    padding: 10px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+}
