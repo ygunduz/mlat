@@ -2,14 +2,17 @@ package main
 
 import (
 	"encoding/xml"
-	"fmt"
 	"io"
 	"log"
 	"os"
 	"strings"
 )
 
-func readFileContents(path string) (*Container, error) {
+func nanosToSeconds(nanos float64) float64 {
+	return nanos / 1000000000
+}
+
+func readFileContents(path string, a *App) (*Container, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -47,7 +50,15 @@ func readFileContents(path string) (*Container, error) {
 					return nil, err
 				}
 				s := findSite(sites, receiver.SiteId)
-				receivers = append(receivers, Receiver{receiver.Id, receiver.SiteId, receiver.DataLink.Dual.A.AddDelaySSR, receiver.DataLink.Dual.B.AddDelaySSR, s})
+				receivers = append(receivers, Receiver{
+					receiver.Id,
+					receiver.SiteId,
+					receiver.DataLink.Dual.A.AddDelaySSR,
+					receiver.DataLink.Dual.B.AddDelaySSR,
+					s,
+					nanosToSeconds(receiver.DataLink.Dual.A.AddDelaySSR) * a.settings.LightSpeed,
+					nanosToSeconds(receiver.DataLink.Dual.B.AddDelaySSR) * a.settings.LightSpeed,
+				})
 				continue
 			} else if v.Name.Local == "Transmitter" {
 				var transmitter transmitter
@@ -91,19 +102,6 @@ func readFileContents(path string) (*Container, error) {
 	container.Transponders = transponders
 	container.DataChannels = dataChannels
 	return &container, nil
-}
-
-func findCoveredReceivers(coveredReceivers coveredReceivers, receivers []Receiver) []*Receiver {
-	var covered []*Receiver
-	for _, coveredReceiver := range coveredReceivers.ReceiverId {
-		for _, receiver := range receivers {
-			if receiver.Id == coveredReceiver {
-				fmt.Println(receiver.Id, coveredReceiver)
-				covered = append(covered, &receiver)
-			}
-		}
-	}
-	return covered
 }
 
 func findSite(sites []Site, id string) *Site {

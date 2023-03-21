@@ -3,10 +3,25 @@ import {Toolbar} from "primereact/toolbar";
 import {Button} from "primereact/button";
 import {ToggleButton} from "primereact/togglebutton";
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
+import {ReloadData} from "../../wailsjs/go/main/App";
+import {useAppContext} from "../context/AppContext";
 
 export const MainLayout = () => {
+    const { setContentLoaded, setLoading, toast } = useAppContext();
     const { pathname } = useLocation();
     const navigate = useNavigate();
+
+    const reloadData = () => {
+        setLoading(true);
+        ReloadData().then(data => {
+            const same = setContentLoaded(data);
+            if (same) {
+                toast.showWarn(`Receivers ${same.join(', ')} are in the same location. Please check the data.`)
+            }
+        }).catch(err => {
+            toast.showError(err);
+        });
+    }
 
     const startContent = (
         <Fragment>
@@ -25,7 +40,7 @@ export const MainLayout = () => {
         <Fragment>
             <Button icon="pi pi-cog" className="p-button-danger mr-2" onClick={() => navigate('/settings')}/>
             <Button icon="pi pi-globe" className="p-button-success mr-2" onClick={() => navigate('/map')}/>
-            <Button icon="pi pi-refresh" className="p-button-info" />
+            <Button icon="pi pi-refresh" className="p-button-info" onClick={reloadData} />
         </Fragment>
     );
 

@@ -49,7 +49,7 @@ export const useDataTable = () => {
 
     const numberEditor = (options) => {
         return <InputNumber style={{height: '35px'}} value={options.value} minFractionDigits={2}
-                            maxFractionDigits={10} locale="en-US"
+                            maxFractionDigits={10} locale="en-US" useGrouping={false}
                             onChange={(e) => options.editorCallback(e.value)}/>;
     };
 

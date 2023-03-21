@@ -6,6 +6,10 @@ export function GetSettings() {
   return window['go']['main']['App']['GetSettings']();
 }
 
+export function ReloadData() {
+  return window['go']['main']['App']['ReloadData']();
+}
+
 export function SelectFile() {
   return window['go']['main']['App']['SelectFile']();
 }

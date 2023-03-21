@@ -148,6 +148,8 @@ export namespace main {
 	    addDelaySSRA: number;
 	    addDelaySSRB: number;
 	    site?: Site;
+	    cableLengthA: number;
+	    cableLengthB: number;
 	
 	    static createFrom(source: any = {}) {
 	        return new Receiver(source);
@@ -160,6 +162,8 @@ export namespace main {
 	        this.addDelaySSRA = source["addDelaySSRA"];
 	        this.addDelaySSRB = source["addDelaySSRB"];
 	        this.site = this.convertValues(source["site"], Site);
+	        this.cableLengthA = source["cableLengthA"];
+	        this.cableLengthB = source["cableLengthB"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

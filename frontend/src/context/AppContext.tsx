@@ -1,13 +1,13 @@
-import {createContext, useContext, useReducer, ReactNode, useRef, useMemo, useEffect} from "react";
+import {createContext, useContext, useReducer, ReactNode, useRef, useMemo, useEffect, forwardRef} from "react";
 import {Toast as PRToast} from "primereact/toast";
 import {Toast} from "../helpers/Toast";
 import {main} from "../../wailsjs/go/models";
 import {GetSettings} from "../../wailsjs/go/main/App";
 import Container = main.Container;
 import Site = main.Site;
-import Receiver = main.Site;
-import Transmitter = main.Site;
-import Transponder = main.Site;
+import Receiver = main.Receiver;
+import Transmitter = main.Transmitter;
+import Transponder = main.Transponder;
 import Settings = main.Settings;
 import DataChannel = main.DataChannel;
 
@@ -15,8 +15,9 @@ interface IAppContext {
     loading: boolean,
     contentLoaded: boolean,
     setLoading: (loading: boolean) => void,
-    setContentLoaded: (container: Container) => void,
+    setContentLoaded: (container: Container) => string[],
     receivers: Receiver[] | undefined,
+    sameLocationReceivers: string[] | undefined,
     transmitters: Transmitter[] | undefined,
     transponders: Transponder[] | undefined,
     sites: Site[] | undefined,
@@ -28,13 +29,26 @@ interface IAppContext {
 
 const AppContext = createContext<IAppContext | null>(null)
 
-interface IyzicoProviderProps {
+interface AppProviderProps {
     children: ReactNode,
+    toast: Toast
 }
 
-export const AppProvider = ({children}: IyzicoProviderProps) => {
-    const ref = useRef<PRToast>();
-    const toast = useMemo(() => new Toast(ref), [ref]);
+const findSameLocationReceivers = (receivers: Receiver[]) => {
+    const sameLocationReceivers: string[] = [];
+    receivers.forEach(receiver => {
+        const sameLocationReceiver = receivers.find(r =>
+            r.site.latitude === receiver.site.latitude &&
+            r.site.longitude === receiver.site.longitude &&
+            r.id !== receiver.id);
+        if (sameLocationReceiver) {
+            sameLocationReceivers.push(receiver.id);
+        }
+    });
+    return sameLocationReceivers;
+}
+
+export const AppProvider = ({children, toast}: AppProviderProps) => {
     const [values, updateValue] = useReducer(
         (prev: any, next: any) => {
             return {...prev, ...next};
@@ -60,15 +74,18 @@ export const AppProvider = ({children}: IyzicoProviderProps) => {
     }
 
     const setContentLoaded = (container: Container) => {
+        const receivers = findSameLocationReceivers(container.receivers);
         updateValue({
             contentLoaded: true,
             loading: false,
             receivers: container.receivers,
             transmitters: container.transmitters,
             transponders: container.transponders,
+            sameLocationReceivers: receivers,
             sites: container.sites,
             dataChannels: container.dataChannels
         });
+        return receivers;
     }
 
     return (
@@ -81,12 +98,12 @@ export const AppProvider = ({children}: IyzicoProviderProps) => {
             sites: values.sites,
             settings: values.settings,
             dataChannels: values.dataChannels,
+            sameLocationReceivers: values.sameLocationReceivers,
             setContentLoaded,
             setLoading,
             setSettings,
             toast
         }}>
-            <PRToast ref={ref}/>
             {children}
         </AppContext.Provider>
     );

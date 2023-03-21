@@ -22,6 +22,8 @@ type Receiver struct {
 	AddDelaySSRA float64 `json:"addDelaySSRA"`
 	AddDelaySSRB float64 `json:"addDelaySSRB"`
 	Site         *Site   `json:"site"`
+	CableLengthA float64 `json:"cableLengthA"`
+	CableLengthB float64 `json:"cableLengthB"`
 }
 
 type Transmitter struct {

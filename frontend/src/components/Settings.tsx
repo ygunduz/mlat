@@ -28,18 +28,12 @@ export default function Settings() {
             </div>
 
             <div className="text-left">
-                <label htmlFor="email" className="block text-900 font-medium mb-2">Light Speed</label>
-                <InputNumber id="email"
-                             type="text"
-                             placeholder="Light Speed"
-                             className="w-full mb-3"
-                             useGrouping={false}
-                             value={lightSpeed}
-                             minFractionDigits={2}
-                             maxFractionDigits={10}
-                             locale="en-US"
-                             onValueChange={(e) => setLightSpeed(e.value)}
-                />
+                <div className="p-inputgroup mb-3">
+                    <span className="p-inputgroup-addon">Light Speed</span>
+                    <InputNumber placeholder="Light Speed" useGrouping={false} value={lightSpeed} minFractionDigits={2}
+                                 maxFractionDigits={10} locale="en-US" onValueChange={(e) => setLightSpeed(e.value)}/>
+                    <span className="p-inputgroup-addon">m/s</span>
+                </div>
                 <Button onClick={saveSettings} label="Save" icon="pi pi-save" className="w-full"/>
             </div>
         </div>

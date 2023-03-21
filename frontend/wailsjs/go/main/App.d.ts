@@ -4,6 +4,8 @@ import {main} from '../models';
 
 export function GetSettings():Promise<main.Settings>;
 
+export function ReloadData():Promise<main.Container>;
+
 export function SelectFile():Promise<main.Container>;
 
 export function UpdateDataChannel(arg1:main.UpdateDataChannel):Promise<main.Container>;

@@ -25,7 +25,7 @@ func NewApp() *App {
 	return &App{}
 }
 
-// startup is called when the app starts. The context is saved
+// startup is called when the app starts. The context is saved,
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
@@ -40,43 +40,7 @@ func (a *App) startup(ctx context.Context) {
 	a.settings = settings
 }
 
-func (a *App) GetSettings() Settings {
-	return a.settings
-}
-
-func (a *App) UpdateSettings(settings Settings) Settings {
-	a.settings = settings
-	data, err := xml.MarshalIndent(settings, "", "  ")
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = os.WriteFile("settings.xml", data, 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return settings
-}
-
-func (a *App) SelectFile() (Container, error) {
-	file, err := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{DefaultFilename: "mss.cfg", Filters: []runtime.FileFilter{
-		{
-			DisplayName: "Xml Configs (*.xml, *.cfg)",
-			Pattern:     "*.xml;*.cfg",
-		},
-	}})
-	if err != nil {
-		return Container{}, err
-	}
-	a.selectedFile = file
-	contents, err := readFileContents(file)
-	if err != nil {
-		return Container{}, err
-	}
-	a.container = contents
-	return *contents, nil
-}
-
-func updateNode(file string, cb func(document *etree.Document) error) (Container, error) {
+func updateNode(file string, a *App, cb func(document *etree.Document) error) (Container, error) {
 	document := etree.NewDocument()
 	document.WriteSettings.CanonicalText = true
 	err := document.ReadFromFile(file)
@@ -91,7 +55,8 @@ func updateNode(file string, cb func(document *etree.Document) error) (Container
 	if err != nil {
 		return Container{}, err
 	}
-	contents, err := readFileContents(file)
+	contents, err := readFileContents(file, a)
+	a.container = contents
 	return *contents, err
 }
 
@@ -135,8 +100,57 @@ func updateSite(siteJson *Site, document *etree.Document) error {
 	return nil
 }
 
+func secondsToNanos(seconds float64) float64 {
+	return seconds * 1000000000
+}
+
+func (a *App) GetSettings() Settings {
+	return a.settings
+}
+
+func (a *App) UpdateSettings(settings Settings) Settings {
+	data, err := xml.MarshalIndent(settings, "", "  ")
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = os.WriteFile("settings.xml", data, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	a.settings = settings
+	return settings
+}
+
+func (a *App) SelectFile() (Container, error) {
+	file, err := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{DefaultFilename: "mss.cfg", Filters: []runtime.FileFilter{
+		{
+			DisplayName: "Xml Configs (*.xml, *.cfg)",
+			Pattern:     "*.xml;*.cfg",
+		},
+	}})
+	if err != nil {
+		return Container{}, err
+	}
+	a.selectedFile = file
+	contents, err := readFileContents(file, a)
+	if err != nil {
+		return Container{}, err
+	}
+	a.container = contents
+	return *contents, nil
+}
+
+func (a *App) ReloadData() (Container, error) {
+	contents, err := readFileContents(a.selectedFile, a)
+	if err != nil {
+		return Container{}, err
+	}
+	a.container = contents
+	return *contents, nil
+}
+
 func (a *App) UpdateTransponder(transponderJson Transponder) (Container, error) {
-	return updateNode(a.selectedFile, func(document *etree.Document) error {
+	return updateNode(a.selectedFile, a, func(document *etree.Document) error {
 		transponder := document.FindElement("//Transponder[@id='" + transponderJson.Id + "']")
 		if transponder == nil {
 			return errors.New("transponder element not found")
@@ -150,7 +164,7 @@ func (a *App) UpdateTransponder(transponderJson Transponder) (Container, error) 
 }
 
 func (a *App) UpdateTransmitter(transmitterJson Transmitter) (Container, error) {
-	return updateNode(a.selectedFile, func(document *etree.Document) error {
+	return updateNode(a.selectedFile, a, func(document *etree.Document) error {
 		transmitter := document.FindElement("//Transmitter[@id='" + transmitterJson.Id + "']")
 		if transmitter == nil {
 			return errors.New("transmitter element not found")
@@ -164,19 +178,20 @@ func (a *App) UpdateTransmitter(transmitterJson Transmitter) (Container, error) 
 }
 
 func (a *App) UpdateReceiver(receiverJson Receiver) (Container, error) {
-	return updateNode(a.selectedFile, func(document *etree.Document) error {
+	return updateNode(a.selectedFile, a, func(document *etree.Document) error {
 		receiver := document.FindElement("//Receiver[@id='" + receiverJson.Id + "']")
 		if receiver == nil {
 			return errors.New("receiver element not found")
 		}
-		receiver.FindElement("DataLink/Dual/A/AddDelaySSR").SetText(fmt.Sprintf("%g", receiverJson.AddDelaySSRA))
-		receiver.FindElement("DataLink/Dual/B/AddDelaySSR").SetText(fmt.Sprintf("%g", receiverJson.AddDelaySSRB))
+		fmt.Println(receiverJson.CableLengthA, receiverJson.CableLengthB)
+		receiver.FindElement("DataLink/Dual/A/AddDelaySSR").SetText(fmt.Sprintf("%.2f", secondsToNanos(receiverJson.CableLengthA/a.settings.LightSpeed)))
+		receiver.FindElement("DataLink/Dual/B/AddDelaySSR").SetText(fmt.Sprintf("%.2f", secondsToNanos(receiverJson.CableLengthB/a.settings.LightSpeed)))
 		return updateSite(receiverJson.Site, document)
 	})
 }
 
 func (a *App) UpdateDataChannel(channel UpdateDataChannel) (Container, error) {
-	return updateNode(a.selectedFile, func(document *etree.Document) error {
+	return updateNode(a.selectedFile, a, func(document *etree.Document) error {
 		for _, item := range channel.Items {
 			for _, element := range document.FindElements("//DataProcessing[@id='" + item.Key + "']/DataChannels/DataChannel/ReceiverId") {
 				if strings.TrimSpace(element.Text()) == channel.Id {
