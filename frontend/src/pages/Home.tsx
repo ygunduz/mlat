@@ -22,9 +22,9 @@ export default function Home() {
     }
     return <div className="grid" style={{width: '100%', marginTop: '45vh'}}>
         <div className="col-6 col-offset-3">
-            <div className="text-center mb-2 text-xl">İşlem Yapabilmek İçin Lütfen Önce Dosya Seçiniz!</div>
+            <div className="text-center mb-2 text-xl">Please Select File First To Interact!</div>
             <div className="col-6 col-offset-3 text-center">
-                <Button label="Dosya Seç" icon="pi pi-file" onClick={selectFile}/>
+                <Button label="Select File" icon="pi pi-file" onClick={selectFile}/>
             </div>
         </div>
     </div>

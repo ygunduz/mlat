@@ -7,8 +7,8 @@ import {ReloadData} from "../../wailsjs/go/main/App";
 import {useAppContext} from "../context/AppContext";
 
 export const MainLayout = () => {
-    const { setContentLoaded, setLoading, toast } = useAppContext();
-    const { pathname } = useLocation();
+    const {setContentLoaded, setLoading, toast} = useAppContext();
+    const {pathname} = useLocation();
     const navigate = useNavigate();
 
     const reloadData = () => {
@@ -26,13 +26,14 @@ export const MainLayout = () => {
     const startContent = (
         <Fragment>
             <ToggleButton onLabel="Receivers" offLabel="Receivers" onChange={() => navigate('/receivers')}
-                          checked={pathname === '/receivers'} className="mr-2"  />
+                          checked={pathname === '/receivers'} className="mr-2"/>
             <ToggleButton onLabel="Transmitters" offLabel="Transmitters" onChange={() => navigate('/transmitters')}
-                          checked={pathname === '/transmitters'} className="mr-2" />
+                          checked={pathname === '/transmitters'} className="mr-2"/>
             <ToggleButton onLabel="Transponders" offLabel="Transponders" onChange={() => navigate('/transponders')}
-                            checked={pathname === '/transponders'} className="mr-2" />
-            <ToggleButton onLabel="Data Processing" offLabel="Data Processing" onChange={() => navigate('/data-processing')}
-                            checked={pathname === '/data-processing'} className="mr-2" />
+                          checked={pathname === '/transponders'} className="mr-2"/>
+            <ToggleButton onLabel="Data Processing" offLabel="Data Processing"
+                          onChange={() => navigate('/data-processing')}
+                          checked={pathname === '/data-processing'} className="mr-2"/>
         </Fragment>
     );
 
@@ -40,15 +41,15 @@ export const MainLayout = () => {
         <Fragment>
             <Button icon="pi pi-cog" className="p-button-danger mr-2" onClick={() => navigate('/settings')}/>
             <Button icon="pi pi-globe" className="p-button-success mr-2" onClick={() => navigate('/map')}/>
-            <Button icon="pi pi-refresh" className="p-button-info" onClick={reloadData} />
+            <Button icon="pi pi-refresh" className="p-button-info" onClick={reloadData}/>
         </Fragment>
     );
 
     return (
         <Fragment>
-            <Toolbar style={{height: '50px', paddingTop: '5px'}} start={startContent} end={endContent} />
+            <Toolbar style={{height: '50px', paddingTop: '5px'}} start={startContent} end={endContent}/>
             <main>
-                <Outlet />
+                <Outlet/>
             </main>
         </Fragment>
     )

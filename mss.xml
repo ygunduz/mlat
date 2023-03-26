@@ -494,7 +494,7 @@
 				</Site>
 				<Site id="TXA00">
 					<Description>S00_LP</Description>
-					<Latitude>36.8942</Latitude>
+					<Latitude>36.8952</Latitude>
 					<Longitude>30.79491111</Longitude>
 					<Height>92.149</Height>
 				</Site>
@@ -536,14 +536,14 @@
 				</Site>
 				<Site id="RMTRA00">
 					<Description>S19_JM</Description>
-					<Latitude>36.90224559</Latitude>
+					<Latitude>36.90225559</Latitude>
 					<Longitude>30.79168441</Longitude>
 					<Height>89.597</Height>
 				</Site>
 				<Site id="RMTRA01">
 					<Description>S13_OLD_TWR</Description>
 					<Latitude>36.90878707</Latitude>
-					<Longitude>30.80003390</Longitude>
+					<Longitude>30.8000339</Longitude>
 					<Height>120.088</Height>
 				</Site>
 			</Sites>
@@ -567,10 +567,10 @@
 						<DataLink>
 							<Dual>
 								<A>
-									<AddDelaySSR>35760.7</AddDelaySSR>
+									<AddDelaySSR>35760.70</AddDelaySSR>
 								</A>
 								<B>
-									<AddDelaySSR>35773.7</AddDelaySSR>
+									<AddDelaySSR>35760.70</AddDelaySSR>
 								</B>
 							</Dual>
 						</DataLink>
@@ -869,11 +869,11 @@
 						<ModeSAddress>4BF0A5</ModeSAddress>
 						<CoveredReceivers>
 							<ReceiverId>rx00</ReceiverId>
+							<ReceiverId>rx01</ReceiverId>
 							<ReceiverId>rx02</ReceiverId>
 							<ReceiverId>rx03</ReceiverId>
 							<ReceiverId>rx06</ReceiverId>
 							<ReceiverId>rx11</ReceiverId>
-							<ReceiverId>rx12</ReceiverId>
 							<ReceiverId>rx13</ReceiverId>
 							<ReceiverId>rx19</ReceiverId>
 							<ReceiverId>rx23</ReceiverId>
@@ -1016,22 +1016,16 @@
 						<SiteId>RMTRA01</SiteId>
 						<ModeSAddress>4BF0AD</ModeSAddress>
 						<CoveredReceivers>
-							<ReceiverId>rx00</ReceiverId>
-							<ReceiverId>rx02</ReceiverId>
 							<ReceiverId>rx04</ReceiverId>
 							<ReceiverId>rx05</ReceiverId>
 							<ReceiverId>rx06</ReceiverId>
 							<ReceiverId>rx08</ReceiverId>
 							<ReceiverId>rx09</ReceiverId>
 							<ReceiverId>rx11</ReceiverId>
-							<ReceiverId>rx12</ReceiverId>
-							<ReceiverId>rx13</ReceiverId>
 							<ReceiverId>rx15</ReceiverId>
 							<ReceiverId>rx16</ReceiverId>
 							<ReceiverId>rx17</ReceiverId>
 							<ReceiverId>rx19</ReceiverId>
-							<ReceiverId>rx20</ReceiverId>
-							<ReceiverId>rx21</ReceiverId>
 							<ReceiverId>rx22</ReceiverId>
 						</CoveredReceivers>
 						<Diag>

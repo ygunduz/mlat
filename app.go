@@ -206,3 +206,7 @@ func (a *App) UpdateDataChannel(channel UpdateDataChannel) (Container, error) {
 		return nil
 	})
 }
+
+func (a *App) GetAreas() (Areas, error) {
+	return decodeAreas(a.selectedFile)
+}

@@ -7,8 +7,6 @@ export default function ToastProvider({children}) {
     const ref = useRef(null);
     const toast = useMemo(() => new Toast(ref), [ref]);
 
-    console.log('toast', toast);
-
     return (
         <Fragment>
             <PRToast ref={ref} baseZIndex={1001}/>

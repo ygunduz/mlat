@@ -1,8 +1,8 @@
-import {createContext, useContext, useReducer, ReactNode, useRef, useMemo, useEffect, forwardRef} from "react";
-import {Toast as PRToast} from "primereact/toast";
+import {createContext, ReactNode, useContext, useEffect, useReducer} from "react";
 import {Toast} from "../helpers/Toast";
 import {main} from "../../wailsjs/go/models";
 import {GetSettings} from "../../wailsjs/go/main/App";
+import {AreaType} from "../helpers/AreaHelpers";
 import Container = main.Container;
 import Site = main.Site;
 import Receiver = main.Receiver;
@@ -24,7 +24,12 @@ interface IAppContext {
     dataChannels: DataChannel[] | undefined,
     settings: Settings | undefined,
     setSettings: (settings: Settings) => void,
-    toast: Toast
+    toast: Toast,
+    areas: Array<AreaType | null> | undefined,
+    setAreas: (areas: Array<AreaType | null> | undefined) => void
+    ignoredReceivers: string[],
+    transmitterHasReceiver: string[],
+    transponderHasReceiver: string[],
 }
 
 const AppContext = createContext<IAppContext | null>(null)
@@ -48,6 +53,58 @@ const findSameLocationReceivers = (receivers: Receiver[]) => {
     return sameLocationReceivers;
 }
 
+const receiverTransmitterSameLocation = (receiver: Receiver[], transmitter: Transmitter[]) => {
+    const sameLocationReceivers: string[] = [];
+    receiver.forEach(r => {
+        const sameLocationReceiver = transmitter.find(t =>
+            t.site.latitude === r.site.latitude &&
+            t.site.longitude === r.site.longitude);
+        if (sameLocationReceiver) {
+            sameLocationReceivers.push(r.id);
+        }
+    });
+    return sameLocationReceivers;
+}
+
+const receiverTransponderSameLocation = (receiver: Receiver[], transponder: Transponder[]) => {
+    const sameLocationReceivers: string[] = [];
+    receiver.forEach(r => {
+        const sameLocationReceiver = transponder.find(t =>
+            t.site.latitude === r.site.latitude &&
+            t.site.longitude === r.site.longitude);
+        if (sameLocationReceiver) {
+            sameLocationReceivers.push(r.id);
+        }
+    });
+    return sameLocationReceivers;
+}
+
+const transponderReceiverSameLocation = (transponder: Transponder[], receiver: Receiver[]) => {
+    const sameLocationTransponders: string[] = [];
+    transponder.forEach(r => {
+        const sameLocationReceiver = receiver.find(t =>
+            t.site.latitude === r.site.latitude &&
+            t.site.longitude === r.site.longitude);
+        if (sameLocationReceiver) {
+            sameLocationTransponders.push(r.id);
+        }
+    });
+    return sameLocationTransponders;
+}
+
+const transmitterReceiverSameLocation = (transmitter: Transmitter[], receiver: Receiver[]) => {
+    const sameLocationTransmitters: string[] = [];
+    transmitter.forEach(r => {
+        const sameLocationReceiver = receiver.find(t =>
+            t.site.latitude === r.site.latitude &&
+            t.site.longitude === r.site.longitude);
+        if (sameLocationReceiver) {
+            sameLocationTransmitters.push(r.id);
+        }
+    });
+    return sameLocationTransmitters;
+}
+
 export const AppProvider = ({children, toast}: AppProviderProps) => {
     const [values, updateValue] = useReducer(
         (prev: any, next: any) => {
@@ -69,12 +126,20 @@ export const AppProvider = ({children, toast}: AppProviderProps) => {
         updateValue({loading});
     }
 
+    const setAreas = (areas: Array<AreaType | null> | undefined) => {
+        updateValue({areas, loading: false});
+    }
+
     const setSettings = (settings: Settings) => {
         updateValue({settings, loading: false});
     }
 
     const setContentLoaded = (container: Container) => {
         const receivers = findSameLocationReceivers(container.receivers);
+        const igrnoredReceivers = [...receiverTransponderSameLocation(container.receivers, container.transponders),
+            ...receiverTransmitterSameLocation(container.receivers, container.transmitters)];
+        const transmitterHasReceiver = transmitterReceiverSameLocation(container.transmitters, container.receivers);
+        const transponderHasReceiver = transponderReceiverSameLocation(container.transponders, container.receivers);
         updateValue({
             contentLoaded: true,
             loading: false,
@@ -83,7 +148,10 @@ export const AppProvider = ({children, toast}: AppProviderProps) => {
             transponders: container.transponders,
             sameLocationReceivers: receivers,
             sites: container.sites,
-            dataChannels: container.dataChannels
+            dataChannels: container.dataChannels,
+            ignoredReceivers: igrnoredReceivers,
+            transmitterHasReceiver,
+            transponderHasReceiver
         });
         return receivers;
     }
@@ -99,9 +167,14 @@ export const AppProvider = ({children, toast}: AppProviderProps) => {
             settings: values.settings,
             dataChannels: values.dataChannels,
             sameLocationReceivers: values.sameLocationReceivers,
+            areas: values.areas,
+            ignoredReceivers: values.ignoredReceivers,
+            transmitterHasReceiver: values.transmitterHasReceiver,
+            transponderHasReceiver: values.transponderHasReceiver,
             setContentLoaded,
             setLoading,
             setSettings,
+            setAreas,
             toast
         }}>
             {children}

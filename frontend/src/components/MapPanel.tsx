@@ -5,16 +5,20 @@ import {main} from "../../wailsjs/go/models";
 import Receiver = main.Receiver;
 import Transponder = main.Transponder;
 import Transmitter = main.Transmitter;
+import {AreaType} from "../helpers/AreaHelpers";
 
 interface IMapPanelProps {
     receivers: Receiver[] | undefined,
     transmitters: Transmitter[] | undefined,
     transponders: Transponder[] | undefined,
+    areas: AreaType[] | undefined,
     selectedTransmitters: Transmitter[] | undefined,
     selectedTransponders: Transponder[] | undefined,
+    selectedAreas: AreaType[] | undefined,
     setSelectedReceivers: (receivers: Receiver[]) => void,
     setSelectedTransmitters: (transmitters: Transmitter[]) => void,
     setSelectedTransponders: (transponders: Transponder[]) => void,
+    setSelectedAreas: (areas: AreaType[]) => void,
 }
 
 export default function MapPanel(props: IMapPanelProps) {
@@ -22,17 +26,28 @@ export default function MapPanel(props: IMapPanelProps) {
         receivers,
         transmitters,
         transponders,
+        areas,
         selectedTransmitters,
         selectedTransponders,
+        selectedAreas,
         setSelectedReceivers,
         setSelectedTransmitters,
-        setSelectedTransponders
+        setSelectedTransponders,
+        setSelectedAreas
     } = props;
+
+    const areaBodyTemplate = (rowData: AreaType) => {
+        return <div className="align-content-between flex flex-row">
+            <div className="mt-1 mr-2" style={{width: '15px', height: '15px', backgroundColor: rowData.color}}/>
+            <div>{rowData.id}</div>
+        </div>
+    }
 
     return <Accordion activeIndex={0}>
         <AccordionTab header="Transmitters">
             <DataTable value={transmitters} selectionMode='radiobutton'
                        selection={selectedTransmitters}
+                       size="small"
                        scrollHeight={'350px'}
                        onSelectionChange={(e) => {
                            // @ts-ignore
@@ -72,6 +87,19 @@ export default function MapPanel(props: IMapPanelProps) {
                        dataKey="id" tableStyle={{maxWidth: '250px'}}>
                 <Column selectionMode="single" headerStyle={{width: '2rem'}} style={{width: 20}}></Column>
                 <Column field="id" header="Transponder Id" style={{width: 150}}></Column>
+            </DataTable>
+        </AccordionTab>
+        <AccordionTab header="Areas">
+            <DataTable value={areas} selectionMode='checkbox'
+                       selection={selectedAreas}
+                       scrollHeight={'350px'}
+                       onSelectionChange={(e) => {
+                           // @ts-ignore
+                           setSelectedAreas(e.value)
+                       }}
+                       dataKey="id" tableStyle={{maxWidth: '250px'}}>
+                <Column selectionMode="multiple" headerStyle={{width: '2rem'}} style={{width: 20}}></Column>
+                <Column field="id" header="Area Id" style={{width: 150}} body={areaBodyTemplate}></Column>
             </DataTable>
         </AccordionTab>
     </Accordion>
