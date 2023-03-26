@@ -10,7 +10,6 @@ import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
 import "./style.css";
-import 'leaflet/dist/leaflet.css';
 import App from "./App.jsx";
 import ToastProvider from "./ToastProvider";
 

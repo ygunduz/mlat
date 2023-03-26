@@ -86,21 +86,5 @@ func decodeAreas(filename string) (Areas, error) {
 		}
 	}
 
-	//fmt.Printf("Number of areas: %d\n", len(areas.Area))
-	//for _, area := range areas.Area {
-	//	fmt.Printf("Area ID: %s\n", area.ID)
-	//	if area.Polygon.Point != nil {
-	//		fmt.Printf("Polygon points: %v\n", area.Polygon.Point)
-	//	} else if area.Circle.Center.Lat != 0 && area.Circle.Center.Lon != 0 {
-	//		fmt.Printf("Circle center: (%f, %f)\n", area.Circle.Center.Lat, area.Circle.Center.Lon)
-	//		fmt.Printf("Circle radius: %d\n", area.Circle.Radius)
-	//	} else if len(area.And.AreaId) > 0 {
-	//		fmt.Printf("And operator: %v\n", area.And.AreaId)
-	//		if len(area.And.Not) > 0 {
-	//			fmt.Printf("Not operator: %v\n", area.And.Not)
-	//		}
-	//	}
-	//	fmt.Println()
-	//}
 	return areas, nil
 }
