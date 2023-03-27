@@ -13,7 +13,7 @@ import Transponder = main.Transponder;
 import {useNavigate} from "react-router-dom";
 import {AreaType, GetAreas} from "../helpers/AreaHelpers";
 import {SceneMode} from "cesium";
-import MapLegend from "./MapLegend";
+import MapLegent from "./MapLegent";
 
 const colors = {
     receiver: Cesium.Color.fromCssColorString('rgb(255,0,0)'),
@@ -216,6 +216,6 @@ export default function Map() {
             {renderTransmitters()}
             {renderTransponders()}
         </Viewer>
-        <MapLegend />
+        <MapLegent />
     </Fragment>
 }
