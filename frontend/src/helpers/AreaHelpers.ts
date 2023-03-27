@@ -3,6 +3,7 @@ import {union, lineToPolygon, circle, lineString, difference} from "@turf/turf"
 import {main} from "../../wailsjs/go/models";
 import Area = main.Area;
 import {Feature, MultiPolygon, Polygon} from "@turf/helpers";
+import Circle = main.Circle;
 
 export interface AreaType {
     id: string,
@@ -26,6 +27,12 @@ const setColor = (area: Feature<any>, color: string) => {
     area.properties.stroke = color;
 }
 
+const _circle = (id: string, c: Circle, color: string) => {
+    const center = [c.center.lon, c.center.lat]
+    const radius = c.radius
+    return {id: id, shape: circle(center, radius, {units: 'meters', properties: {fill: color, stroke: color}}), color: color}
+}
+
 const processAreas = (areas: Area[]): Array<AreaType | null> => {
     return areas.map((area, index) => {
         if (area.polygon?.point && area.polygon.point.length > 0) {
@@ -34,15 +41,28 @@ const processAreas = (areas: Area[]): Array<AreaType | null> => {
             })
             return {id: area.id, shape: lineToPolygon(lineString([...points]), {properties: {fill: colorArray[index], stroke: colorArray[index]}}), color: colorArray[index]}
         } else if (area.circle?.center?.lat && area.circle?.center?.lon) {
-            const center = [area.circle.center.lon, area.circle.center.lat]
-            const radius = area.circle.radius
-            return {id: area.id, shape: circle(center, radius, {units: 'meters', properties: {fill: colorArray[index], stroke: colorArray[index]}}), color: colorArray[index]}
-        } else if (area.and?.areaId && area.and.areaId.length > 0) {
-            const list = areas.filter((a) => area.and.areaId.includes(a.id))
-            const processedAreas = processAreas(list);
-            let a = processedAreas[0].shape;
-            for (let i = 1; i < processedAreas.length; i++) {
-                a = union(a, processedAreas[i].shape, {properties: {fill: colorArray[index], stroke: colorArray[index]}})
+            return _circle(area.id, area.circle, colorArray[index]);
+        } else if (area.and) {
+            let a: Feature<any> = null;
+            if(area.and.areaId?.length > 0) {
+                const list = areas.filter((a) => area.and.areaId.includes(a.id))
+                const processedAreas = processAreas(list);
+                let a = processedAreas[0].shape;
+                for (let i = 1; i < processedAreas.length; i++) {
+                    a = union(a, processedAreas[i].shape, {properties: {fill: colorArray[index], stroke: colorArray[index]}})
+                }
+            }
+            if (area.and.circle && area.and.circle.length > 0) {
+                if(a === null) {
+                    a = _circle(area.id, area.and.circle[0], colorArray[index]).shape;
+                    for (let i = 1; i < area.and.circle.length; i++) {
+                        a = union(a, _circle(area.id, area.and.circle[i], colorArray[index]).shape, {properties: {fill: colorArray[index], stroke: colorArray[index]}})
+                    }
+                } else {
+                    for (let i = 0; i < area.and.circle.length; i++) {
+                        a = union(a, _circle(area.id, area.and.circle[i], colorArray[index]).shape, {properties: {fill: colorArray[index], stroke: colorArray[index]}})
+                    }
+                }
             }
             if (area.and.not && area.and.not.length > 0) {
                 const nots = area.and.not.map(id => id.areaId);

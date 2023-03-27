@@ -47,7 +47,20 @@ type Center struct {
 type And struct {
 	XMLName xml.Name `xml:"and"`
 	AreaId  []string `xml:"AreaId" json:"areaId"`
+	Circle  []Circle `xml:"Circle" json:"circle"`
+	Height  []Height `xml:"Height" json:"height"`
 	Not     []Not    `xml:"not" json:"not"`
+}
+
+type Height struct {
+	XMLName xml.Name `xml:"Height"`
+	Between Between  `xml:"Between" json:"between"`
+}
+
+type Between struct {
+	XMLName xml.Name `xml:"Between"`
+	Lower   float64  `xml:"Lower" json:"lower"`
+	Upper   float64  `xml:"Upper" json:"upper"`
 }
 
 type Not struct {

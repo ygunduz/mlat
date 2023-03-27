@@ -50,6 +50,7 @@ export default function Map() {
     useEffect(() => {
         setLoading(true);
         GetAreas().then(a => {
+            console.log(a);
             setAreas(a);
         }).catch(e => {
             setLoading(false)
