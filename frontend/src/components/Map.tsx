@@ -1,4 +1,4 @@
-import {CesiumComponentRef, Entity, EntityDescription, Viewer} from "resium";
+import {CesiumComponentRef, CesiumMovementEvent, Entity, EntityDescription, Label, Viewer} from "resium";
 import {Fragment, useCallback, useEffect, useRef, useState} from "react";
 import {Button} from "primereact/button";
 import {OverlayPanel} from "primereact/overlaypanel";
@@ -27,6 +27,7 @@ const pinBuilder = new Cesium.PinBuilder();
 
 export default function Map() {
     const mapRef = useRef<CesiumComponentRef<Cesium.Viewer>>(null);
+    const entityRef = useRef<CesiumComponentRef<Cesium.Entity>>(null);
     const op = useRef(null);
     const navigate = useNavigate();
     const {
@@ -50,7 +51,6 @@ export default function Map() {
     useEffect(() => {
         setLoading(true);
         GetAreas().then(a => {
-            console.log(a);
             setAreas(a);
         }).catch(e => {
             setLoading(false)
@@ -163,6 +163,42 @@ export default function Map() {
 
     }
 
+    const onMouseMove = (movement: CesiumMovementEvent) => {
+        const scene = mapRef?.current?.cesiumElement?.scene;
+        const camera = mapRef?.current?.cesiumElement?.camera;
+        if (!scene || !camera || !entityRef?.current) {
+            return;
+        }
+        const cartesian = camera.pickEllipsoid(
+            movement.endPosition,
+            scene.globe.ellipsoid
+        );
+        if (cartesian) {
+            const cartographic = Cesium.Cartographic.fromCartesian(
+                cartesian
+            );
+            const longitudeString = Cesium.Math.toDegrees(
+                cartographic.longitude
+            ).toFixed(6);
+            const latitudeString = Cesium.Math.toDegrees(
+                cartographic.latitude
+            ).toFixed(6);
+
+            const entity = entityRef.current.cesiumElement;
+            // @ts-ignore
+            entity.position = cartesian;
+            // @ts-ignore
+            entity.label.show = true;
+            // @ts-ignore
+            entity.label.text =
+                `Lon: ${`${longitudeString}`}\u00B0` +
+                `\nLat: ${`${latitudeString}`}\u00B0`;
+        } else {
+            // @ts-ignore
+            entityRef.current.cesiumElement.label.show = false;
+        }
+    }
+
     const renderReceivers = () => {
         const ids = selectedReceivers.map(r => r.id);
         return receivers?.map((receiver) => {
@@ -212,7 +248,19 @@ export default function Map() {
         <Viewer
             full
             ref={mapRef}
+            onMouseMove={onMouseMove}
             sceneMode={SceneMode.SCENE2D}>
+            <Entity
+                ref={entityRef}
+                label={{
+                    show: false,
+                    showBackground: true,
+                    font: '14px monospace',
+                    horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
+                    verticalOrigin: Cesium.VerticalOrigin.TOP,
+                    pixelOffset: new Cesium.Cartesian2(15, 0)
+                }}
+            />
             {renderReceivers()}
             {renderTransmitters()}
             {renderTransponders()}
