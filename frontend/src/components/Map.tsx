@@ -106,7 +106,7 @@ export default function Map() {
             key={entity.id}
             name={entity.id}
             billboard={billBoard}
-            point={hasPoint ? {pixelSize: 8, color: color} : undefined}
+            point={hasPoint ? {pixelSize: 8, color: color, outlineWidth: 1} : undefined}
             position={Cesium.Cartesian3.fromDegrees(entity.site.longitude, entity.site.latitude, entity.site.height)}
         >
             <EntityDescription>
@@ -249,6 +249,10 @@ export default function Map() {
             full
             ref={mapRef}
             onMouseMove={onMouseMove}
+            sceneModePicker={false}
+            navigationHelpButton={false}
+            homeButton={false}
+            fullscreenButton={false}
             sceneMode={SceneMode.SCENE2D}>
             <Entity
                 ref={entityRef}

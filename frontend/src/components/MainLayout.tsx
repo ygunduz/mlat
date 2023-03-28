@@ -15,7 +15,7 @@ export const MainLayout = () => {
         setLoading(true);
         ReloadData().then(data => {
             const same = setContentLoaded(data);
-            if (same) {
+            if (same && same.length > 0) {
                 toast.showWarn(`Receivers ${same.join(', ')} are in the same location. Please check the data.`)
             }
         }).catch(err => {

@@ -11,7 +11,7 @@ export default function Home() {
         setLoading(true);
         SelectFile().then((result) => {
             const same = setContentLoaded(result);
-            if (same) {
+            if (same && same.length > 0) {
                 toast.showWarn(`Receivers ${same.join(', ')} are in the same location. Please check the data.`)
             }
             navigate('/receivers');
