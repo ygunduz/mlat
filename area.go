@@ -45,11 +45,12 @@ type Center struct {
 }
 
 type And struct {
-	XMLName xml.Name `xml:"and"`
-	AreaId  []string `xml:"AreaId" json:"areaId"`
-	Circle  []Circle `xml:"Circle" json:"circle"`
-	Height  []Height `xml:"Height" json:"height"`
-	Not     []Not    `xml:"not" json:"not"`
+	XMLName xml.Name  `xml:"and"`
+	AreaId  []string  `xml:"AreaId" json:"areaId"`
+	Circle  []Circle  `xml:"Circle" json:"circle"`
+	Polygon []Polygon `xml:"Polygon" json:"polygon"`
+	Height  []Height  `xml:"Height" json:"height"`
+	Not     []Not     `xml:"not" json:"not"`
 }
 
 type Height struct {
@@ -64,8 +65,11 @@ type Between struct {
 }
 
 type Not struct {
-	XMLName xml.Name `xml:"not"`
-	AreaId  string   `xml:"AreaId" json:"areaId"`
+	XMLName xml.Name  `xml:"not"`
+	AreaId  []string  `xml:"AreaId" json:"areaId"`
+	Circle  []Circle  `xml:"Circle" json:"circle"`
+	Polygon []Polygon `xml:"Polygon" json:"polygon"`
+	Height  []Height  `xml:"Height" json:"height"`
 }
 
 func decodeAreas(filename string) (Areas, error) {

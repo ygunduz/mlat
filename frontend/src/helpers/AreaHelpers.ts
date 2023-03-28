@@ -4,6 +4,7 @@ import {main} from "../../wailsjs/go/models";
 import Area = main.Area;
 import {Feature, MultiPolygon, Polygon} from "@turf/helpers";
 import Circle = main.Circle;
+import TPolygon = main.Polygon;
 
 export interface AreaType {
     id: string,
@@ -33,44 +34,80 @@ const _circle = (id: string, c: Circle, color: string) => {
     return {id: id, shape: circle(center, radius, {units: 'meters', properties: {fill: color, stroke: color}}), color: color}
 }
 
+const _polygon = (id: string, p: TPolygon, color: string) => {
+    const points = p.point.map((point) => {
+        return [point.lon, point.lat]
+    })
+    return {id, shape: lineToPolygon(lineString([...points]), {properties: {fill: color, stroke: color}}), color: color}
+}
+
+const processAreaIds = (areas: Area[], areaIds: string[], a: Feature<any> = null, color: string, method: any) => {
+    if(areaIds && areaIds.length > 0) {
+        const list = areas.filter((b) => areaIds.includes(b.id))
+        const processedAreas = processAreas(list);
+        if (a === null) {
+            a = processedAreas[0].shape;
+            for (let i = 1; i < processedAreas.length; i++) {
+                a = method(a, processedAreas[i].shape, {properties: {fill: color, stroke: color}})
+            }
+        } else {
+            for (let i = 0; i < processedAreas.length; i++) {
+                a = method(a, processedAreas[i].shape, {properties: {fill: color, stroke: color}})
+            }
+        }
+    }
+    return a;
+}
+
+const processCircle = (circles: Circle[], a: Feature<any> = null, color: string, method: any) => {
+    if (circles && circles.length > 0) {
+        if(a === null) {
+            a = _circle(null, circles[0], color).shape;
+            for (let i = 1; i < circles.length; i++) {
+                a = method(a, _circle(null, circles[i], color).shape, {properties: {fill: color, stroke: color}})
+            }
+        } else {
+            for (let i = 0; i < circles.length; i++) {
+                a = method(a, _circle(null, circles[i], color).shape, {properties: {fill: color, stroke: color}})
+            }
+        }
+    }
+    return a;
+}
+
+const processPolygon = (polygons: TPolygon[], a: Feature<any> = null, color: string, method: any) => {
+    if (polygons && polygons.length > 0) {
+        if(a === null) {
+            a = _polygon(null, polygons[0], color).shape;
+            for (let i = 1; i < polygons.length; i++) {
+                a = method(a, _polygon(null, polygons[i], color).shape, {properties: {fill: color, stroke: color}})
+            }
+        } else {
+            for (let i = 0; i < polygons.length; i++) {
+                a = method(a, _polygon(null, polygons[i], color).shape, {properties: {fill: color, stroke: color}})
+            }
+        }
+    }
+    return a;
+}
+
 const processAreas = (areas: Area[]): Array<AreaType | null> => {
     return areas.map((area, index) => {
         if (area.polygon?.point && area.polygon.point.length > 0) {
-            const points = area.polygon.point.map((point) => {
-                return [point.lon, point.lat]
-            })
-            return {id: area.id, shape: lineToPolygon(lineString([...points]), {properties: {fill: colorArray[index], stroke: colorArray[index]}}), color: colorArray[index]}
+            return _polygon(area.id, area.polygon, colorArray[index])
         } else if (area.circle?.center?.lat && area.circle?.center?.lon) {
             return _circle(area.id, area.circle, colorArray[index]);
         } else if (area.and) {
             let a: Feature<any> = null;
-            if(area.and.areaId?.length > 0) {
-                const list = areas.filter((a) => area.and.areaId.includes(a.id))
-                const processedAreas = processAreas(list);
-                let a = processedAreas[0].shape;
-                for (let i = 1; i < processedAreas.length; i++) {
-                    a = union(a, processedAreas[i].shape, {properties: {fill: colorArray[index], stroke: colorArray[index]}})
-                }
-            }
-            if (area.and.circle && area.and.circle.length > 0) {
-                if(a === null) {
-                    a = _circle(area.id, area.and.circle[0], colorArray[index]).shape;
-                    for (let i = 1; i < area.and.circle.length; i++) {
-                        a = union(a, _circle(area.id, area.and.circle[i], colorArray[index]).shape, {properties: {fill: colorArray[index], stroke: colorArray[index]}})
-                    }
-                } else {
-                    for (let i = 0; i < area.and.circle.length; i++) {
-                        a = union(a, _circle(area.id, area.and.circle[i], colorArray[index]).shape, {properties: {fill: colorArray[index], stroke: colorArray[index]}})
-                    }
-                }
-            }
-            if (area.and.not && area.and.not.length > 0) {
-                const nots = area.and.not.map(id => id.areaId);
-                const list = areas.filter((a) => nots.includes(a.id))
-                const processedAreas = processAreas(list);
-                for (let i = 0; i < processedAreas.length; i++) {
-                    a = difference(a, processedAreas[i].shape)
-                }
+            a = processAreaIds(areas, area.and.areaId, a, colorArray[index], union)
+            a = processCircle(area.and.circle, a, colorArray[index], union);
+            a = processPolygon(area.and.polygon, a, colorArray[index], union);
+            if (area.and.not) {
+                area.and.not.forEach((not) => {
+                    a = processAreaIds(areas, not.areaId, a, colorArray[index], difference);
+                    a = processCircle(not.circle, a, colorArray[index], difference);
+                    a = processPolygon(not.polygon, a, colorArray[index], difference);
+                })
             }
             setColor(a, colorArray[index])
             return {id: area.id, shape: a, color: colorArray[index]}

@@ -51,8 +51,10 @@ export default function Map() {
     useEffect(() => {
         setLoading(true);
         GetAreas().then(a => {
+            console.log(a);
             setAreas(a);
         }).catch(e => {
+            console.log(e)
             setLoading(false)
         })
         if (receivers && receivers.length > 0) {
