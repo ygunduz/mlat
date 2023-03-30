@@ -67,3 +67,13 @@ type dual struct {
 type dualItem struct {
 	AddDelaySSR float64 `xml:"AddDelaySSR"`
 }
+
+type channels struct {
+	Channels []channel `xml:"Channel"`
+}
+
+type channel struct {
+	Id    string `xml:"id,attr"`
+	Name  string `xml:"Name"`
+	ComId string `xml:"ComId"`
+}

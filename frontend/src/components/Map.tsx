@@ -14,6 +14,7 @@ import {useNavigate} from "react-router-dom";
 import {AreaType, GetAreas} from "../helpers/AreaHelpers";
 import {SceneMode} from "cesium";
 import MapLegent from "./MapLegent";
+import useClipboard from 'react-hook-clipboard'
 
 const colors = {
     receiver: Cesium.Color.fromCssColorString('rgb(255,0,0)'),
@@ -26,8 +27,10 @@ const colors = {
 const pinBuilder = new Cesium.PinBuilder();
 
 export default function Map() {
+    const [clipboard, copyToClipboard] = useClipboard()
     const mapRef = useRef<CesiumComponentRef<Cesium.Viewer>>(null);
     const entityRef = useRef<CesiumComponentRef<Cesium.Entity>>(null);
+    const positionRef = useRef<string>(null);
     const op = useRef(null);
     const navigate = useNavigate();
     const {
@@ -51,10 +54,8 @@ export default function Map() {
     useEffect(() => {
         setLoading(true);
         GetAreas().then(a => {
-            console.log(a);
             setAreas(a);
         }).catch(e => {
-            console.log(e)
             setLoading(false)
         })
         if (receivers && receivers.length > 0) {
@@ -89,6 +90,21 @@ export default function Map() {
             }
         }
     }, [selectedAreas])
+
+    useEffect(() => {
+        document.addEventListener('keypress', handlePositionPick);
+        return () => {
+            document.removeEventListener('keypress', handlePositionPick);
+        }
+    }, [positionRef, toast])
+
+    const handlePositionPick = useCallback((e) => {
+        if (e.key === 'p' && positionRef.current) {
+            const position = positionRef.current;
+            copyToClipboard(position);
+            toast.showInfo("Position picked: " + positionRef.current);
+        }
+    }, [positionRef, toast])
 
     const reloadData = useCallback(() => {
         setLoading(true);
@@ -176,6 +192,7 @@ export default function Map() {
             scene.globe.ellipsoid
         );
         if (cartesian) {
+            console.log(cartesian)
             const cartographic = Cesium.Cartographic.fromCartesian(
                 cartesian
             );
@@ -193,8 +210,9 @@ export default function Map() {
             entity.label.show = true;
             // @ts-ignore
             entity.label.text =
-                `Lon: ${`${longitudeString}`}\u00B0` +
-                `\nLat: ${`${latitudeString}`}\u00B0`;
+                `Lat: ${`${latitudeString}`}\u00B0` +
+                `\nLon: ${`${longitudeString}`}\u00B0`;
+            positionRef.current = `<Latitude>${latitudeString}</Latitude>\n<Longitude>${longitudeString}</Longitude>`;
         } else {
             // @ts-ignore
             entityRef.current.cesiumElement.label.show = false;
@@ -256,20 +274,21 @@ export default function Map() {
             homeButton={false}
             fullscreenButton={false}
             sceneMode={SceneMode.SCENE2D}>
+            {renderReceivers()}
+            {renderTransmitters()}
+            {renderTransponders()}
             <Entity
                 ref={entityRef}
                 label={{
                     show: false,
                     showBackground: true,
                     font: '14px monospace',
+                    eyeOffset: new Cesium.Cartesian3(0.0, 0.0, -0.1),
                     horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
                     verticalOrigin: Cesium.VerticalOrigin.TOP,
                     pixelOffset: new Cesium.Cartesian2(15, 0)
                 }}
             />
-            {renderReceivers()}
-            {renderTransmitters()}
-            {renderTransponders()}
         </Viewer>
         <MapLegent />
     </Fragment>
