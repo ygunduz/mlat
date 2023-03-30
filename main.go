@@ -16,7 +16,7 @@ func main() {
 
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:  "radar",
+		Title:  "MLAT Configuration Tool",
 		Width:  1280,
 		Height: 720,
 		AssetServer: &assetserver.Options{
