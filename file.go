@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"encoding/xml"
 	"io"
 	"log"
@@ -10,6 +11,28 @@ import (
 
 func nanosToSeconds(nanos float64) float64 {
 	return nanos / 1000000000
+}
+
+func RetrieveROM(filename string) ([]byte, error) {
+	file, err := os.Open(filename)
+
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	stats, statsErr := file.Stat()
+	if statsErr != nil {
+		return nil, statsErr
+	}
+
+	var size int64 = stats.Size()
+	bytes := make([]byte, size)
+
+	bufr := bufio.NewReader(file)
+	_, err = bufr.Read(bytes)
+
+	return bytes, err
 }
 
 func readFileContents(path string, a *App) (*Container, error) {
