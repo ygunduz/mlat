@@ -2,3 +2,5 @@ build/bin
 node_modules
 frontend/dist
 .idea
+
+mlat/opt/mlat/mlat
