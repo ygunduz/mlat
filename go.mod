@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/beevik/etree v1.1.0
-	github.com/wailsapp/wails/v2 v2.4.0
+	github.com/wailsapp/wails/v2 v2.4.1
 )
 
 require (

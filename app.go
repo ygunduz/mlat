@@ -40,7 +40,7 @@ func (a *App) startup(ctx context.Context) {
 	a.settings = settings
 }
 
-func updateNode(file string, a *App, cb func(document *etree.Document) error) (Container, error) {
+func (a *App) updateNode(file string, cb func(document *etree.Document) error) (Container, error) {
 	document := etree.NewDocument()
 	document.WriteSettings.CanonicalText = true
 	err := document.ReadFromFile(file)
@@ -55,9 +55,11 @@ func updateNode(file string, a *App, cb func(document *etree.Document) error) (C
 	if err != nil {
 		return Container{}, err
 	}
-	contents, err := readFileContents(file, a)
-	a.container = contents
-	return *contents, err
+	err = a.readFileContents(file)
+	if err != nil {
+		return Container{}, err
+	}
+	return *a.container, nil
 }
 
 func updateCoveredReceivers(coveredReceivers string, transmitter *etree.Element) error {
@@ -132,25 +134,23 @@ func (a *App) SelectFile() (Container, error) {
 		return Container{}, err
 	}
 	a.selectedFile = file
-	contents, err := readFileContents(file, a)
+	err = a.readFileContents(file)
 	if err != nil {
 		return Container{}, err
 	}
-	a.container = contents
-	return *contents, nil
+	return *a.container, nil
 }
 
 func (a *App) ReloadData() (Container, error) {
-	contents, err := readFileContents(a.selectedFile, a)
+	err := a.readFileContents(a.selectedFile)
 	if err != nil {
 		return Container{}, err
 	}
-	a.container = contents
-	return *contents, nil
+	return *a.container, nil
 }
 
 func (a *App) UpdateTransponder(transponderJson Transponder) (Container, error) {
-	return updateNode(a.selectedFile, a, func(document *etree.Document) error {
+	return a.updateNode(a.selectedFile, func(document *etree.Document) error {
 		transponder := document.FindElement("//Transponder[@id='" + transponderJson.Id + "']")
 		if transponder == nil {
 			return errors.New("transponder element not found")
@@ -164,7 +164,7 @@ func (a *App) UpdateTransponder(transponderJson Transponder) (Container, error) 
 }
 
 func (a *App) UpdateTransmitter(transmitterJson Transmitter) (Container, error) {
-	return updateNode(a.selectedFile, a, func(document *etree.Document) error {
+	return a.updateNode(a.selectedFile, func(document *etree.Document) error {
 		transmitter := document.FindElement("//Transmitter[@id='" + transmitterJson.Id + "']")
 		if transmitter == nil {
 			return errors.New("transmitter element not found")
@@ -178,7 +178,7 @@ func (a *App) UpdateTransmitter(transmitterJson Transmitter) (Container, error) 
 }
 
 func (a *App) UpdateReceiver(receiverJson Receiver) (Container, error) {
-	return updateNode(a.selectedFile, a, func(document *etree.Document) error {
+	return a.updateNode(a.selectedFile, func(document *etree.Document) error {
 		receiver := document.FindElement("//Receiver[@id='" + receiverJson.Id + "']")
 		if receiver == nil {
 			return errors.New("receiver element not found")
@@ -191,7 +191,7 @@ func (a *App) UpdateReceiver(receiverJson Receiver) (Container, error) {
 }
 
 func (a *App) UpdateDataChannel(channel UpdateDataChannel) (Container, error) {
-	return updateNode(a.selectedFile, a, func(document *etree.Document) error {
+	return a.updateNode(a.selectedFile, func(document *etree.Document) error {
 		for _, item := range channel.Items {
 			for _, element := range document.FindElements("//DataProcessing[@id='" + item.Key + "']/DataChannels/DataChannel/ReceiverId") {
 				if strings.TrimSpace(element.Text()) == channel.Id {

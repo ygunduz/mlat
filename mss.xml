@@ -994,8 +994,6 @@
 						<ModeSAddress>4BF0AC</ModeSAddress>
 						<CoveredReceivers>
 							<ReceiverId>rx00</ReceiverId>
-							<ReceiverId>rx04</ReceiverId>
-							<ReceiverId>rx05</ReceiverId>
 							<ReceiverId>rx06</ReceiverId>
 							<ReceiverId>rx08</ReceiverId>
 							<ReceiverId>rx13</ReceiverId>
