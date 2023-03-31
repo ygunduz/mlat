@@ -1,0 +1,7 @@
+Package: mlat
+Version: 1.0
+Architecture: amd64
+Maintainer: Yusuf Gunduz <ysfgndz@ymail.com>
+Depends: build-essential, libgtk-3-dev, libwebkit2gtk-4.0-dev, pkg-config
+Description: MLAT Configuration Tool
+Files: usr/share/applications/mlat.desktop
