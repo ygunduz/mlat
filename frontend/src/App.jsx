@@ -10,6 +10,7 @@ import TransmitterTransponder from "./components/TransmitterTransponder";
 import DataProcessing from "./components/DataProcessing";
 import Settings from "./components/Settings";
 import Map from "./components/Map";
+import Channels from "./components/Channels";
 
 function App() {
     const { loading } = useAppContext()
@@ -25,6 +26,7 @@ function App() {
                         <Route path="/transmitters" element={<TransmitterTransponder type="transmitter" />} />
                         <Route path="/transponders" element={<TransmitterTransponder type="transponder" />} />
                         <Route path="/data-processing" element={<DataProcessing />} />
+                        <Route path="/channels" element={<Channels />} />
                         <Route path="/settings" element={<Settings />} />
                     </Route>
                     <Route path="/map" element={<Map />} />

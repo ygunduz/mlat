@@ -1,7 +1,7 @@
 import {Button} from "primereact/button";
 import {useAppContext} from "../context/AppContext";
 import {SelectFile} from "../../wailsjs/go/main/App";
-import {useNavigate, useRoutes} from "react-router-dom"
+import {useNavigate} from "react-router-dom"
 
 export default function Home() {
     const {setLoading, toast, setContentLoaded} = useAppContext();

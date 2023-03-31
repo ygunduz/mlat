@@ -69,11 +69,67 @@ type dualItem struct {
 }
 
 type channels struct {
-	Channels []channel `xml:"Channel"`
+	Channel []channel `xml:"Channel"`
 }
 
 type channel struct {
 	Id    string `xml:"id,attr"`
 	Name  string `xml:"Name"`
 	ComId string `xml:"ComId"`
+}
+
+type communications struct {
+	Out out  `xml:"Out"`
+	Com coms `xml:"Coms"`
+	Ip  ip   `xml:"IP"`
+}
+
+type ip struct {
+	Addresses addresses `xml:"Addresses"`
+	Ports     ports     `xml:"Ports"`
+}
+
+type ports struct {
+	Port []port `xml:"Port"`
+}
+
+type port struct {
+	Id      string `xml:"id,attr"`
+	Content string `xml:",chardata"`
+}
+
+type addresses struct {
+	Address []address `xml:"Address"`
+}
+
+type address struct {
+	Id      string `xml:"id,attr"`
+	Content string `xml:",chardata"`
+}
+
+type out struct {
+	Channels channels `xml:"Channels"`
+}
+
+type coms struct {
+	TcpServer []tcpServer `xml:"TcpServer"`
+	TcpClient []tcpClient `xml:"TcpClient"`
+	Udp       []udp       `xml:"UDP"`
+}
+
+type tcpServer struct {
+	Id     string `xml:"id,attr"`
+	PortId string `xml:"PortId"`
+}
+
+type tcpClient struct {
+	Id     string `xml:"id,attr"`
+	IPId   string `xml:"IPId"`
+	PortId string `xml:"PortId"`
+}
+
+type udp struct {
+	Id     string `xml:"id,attr"`
+	IPId   string `xml:"IPId"`
+	PortId string `xml:"PortId"`
 }

@@ -6,6 +6,7 @@ type Container struct {
 	Transmitters []Transmitter `json:"transmitters"`
 	Transponders []Transponder `json:"transponders"`
 	DataChannels []DataChannel `json:"dataChannels"`
+	Channels     []Channel     `json:"channels"`
 }
 
 type Site struct {
@@ -43,6 +44,16 @@ type Transponder struct {
 	Diag             Diag   `json:"diag"`
 	CoveredReceivers string `json:"coveredReceivers"`
 	Site             *Site  `json:"site"`
+}
+
+type Channel struct {
+	Id          string `json:"id"`
+	Name        string `json:"name"`
+	ComId       string `json:"comId"`
+	IPId        string `json:"ipId"`
+	MulticastIp string `json:"multicastIp"`
+	PortId      string `json:"portId"`
+	Port        int    `json:"port"`
 }
 
 type Diag struct {

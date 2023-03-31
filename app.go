@@ -45,19 +45,19 @@ func (a *App) updateNode(file string, cb func(document *etree.Document) error) (
 	document.WriteSettings.CanonicalText = true
 	err := document.ReadFromFile(file)
 	if err != nil {
-		return Container{}, err
+		return *a.container, err
 	}
 	err = cb(document)
 	if err != nil {
-		return Container{}, err
+		return *a.container, err
 	}
 	err = document.WriteToFile(file)
 	if err != nil {
-		return Container{}, err
+		return *a.container, err
 	}
 	err = a.readFileContents(file)
 	if err != nil {
-		return Container{}, err
+		return *a.container, err
 	}
 	return *a.container, nil
 }
@@ -147,6 +147,22 @@ func (a *App) ReloadData() (Container, error) {
 		return Container{}, err
 	}
 	return *a.container, nil
+}
+
+func (a *App) UpdateChannel(channelJson Channel) (Container, error) {
+	return a.updateNode(a.selectedFile, func(document *etree.Document) error {
+		ip := document.FindElement("//Address[@id='" + channelJson.IPId + "']")
+		if ip == nil {
+			return errors.New("ip element not found")
+		}
+		ip.SetText(channelJson.MulticastIp)
+		port := document.FindElement("//Port[@id='" + channelJson.PortId + "']")
+		if port == nil {
+			return errors.New("port element not found")
+		}
+		port.SetText(fmt.Sprintf("%d", channelJson.Port))
+		return nil
+	})
 }
 
 func (a *App) UpdateTransponder(transponderJson Transponder) (Container, error) {

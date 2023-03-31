@@ -18,6 +18,10 @@ export function SelectFile() {
   return window['go']['main']['App']['SelectFile']();
 }
 
+export function UpdateChannel(arg1) {
+  return window['go']['main']['App']['UpdateChannel'](arg1);
+}
+
 export function UpdateDataChannel(arg1) {
   return window['go']['main']['App']['UpdateDataChannel'](arg1);
 }

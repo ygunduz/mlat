@@ -279,6 +279,30 @@ export namespace main {
 	}
 	
 	
+	export class Channel {
+	    id: string;
+	    name: string;
+	    comId: string;
+	    ipId: string;
+	    multicastIp: string;
+	    portId: string;
+	    port: number;
+	
+	    static createFrom(source: any = {}) {
+	        return new Channel(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.name = source["name"];
+	        this.comId = source["comId"];
+	        this.ipId = source["ipId"];
+	        this.multicastIp = source["multicastIp"];
+	        this.portId = source["portId"];
+	        this.port = source["port"];
+	    }
+	}
 	
 	export class DataChannelItem {
 	    enabled: number;
@@ -490,6 +514,7 @@ export namespace main {
 	    transmitters: Transmitter[];
 	    transponders: Transponder[];
 	    dataChannels: DataChannel[];
+	    channels: Channel[];
 	
 	    static createFrom(source: any = {}) {
 	        return new Container(source);
@@ -502,6 +527,7 @@ export namespace main {
 	        this.transmitters = this.convertValues(source["transmitters"], Transmitter);
 	        this.transponders = this.convertValues(source["transponders"], Transponder);
 	        this.dataChannels = this.convertValues(source["dataChannels"], DataChannel);
+	        this.channels = this.convertValues(source["channels"], Channel);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

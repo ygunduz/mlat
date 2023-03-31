@@ -10,6 +10,7 @@ import Transmitter = main.Transmitter;
 import Transponder = main.Transponder;
 import Settings = main.Settings;
 import DataChannel = main.DataChannel;
+import Channel = main.Channel;
 
 interface IAppContext {
     loading: boolean,
@@ -22,6 +23,7 @@ interface IAppContext {
     transponders: Transponder[] | undefined,
     sites: Site[] | undefined,
     dataChannels: DataChannel[] | undefined,
+    channels: Channel[] | undefined,
     settings: Settings | undefined,
     setSettings: (settings: Settings) => void,
     toast: Toast,
@@ -149,6 +151,7 @@ export const AppProvider = ({children, toast}: AppProviderProps) => {
             sameLocationReceivers: receivers,
             sites: container.sites,
             dataChannels: container.dataChannels,
+            channels: container.channels,
             ignoredReceivers: igrnoredReceivers,
             transmitterHasReceiver,
             transponderHasReceiver
@@ -171,6 +174,7 @@ export const AppProvider = ({children, toast}: AppProviderProps) => {
             ignoredReceivers: values.ignoredReceivers,
             transmitterHasReceiver: values.transmitterHasReceiver,
             transponderHasReceiver: values.transponderHasReceiver,
+            channels: values.channels,
             setContentLoaded,
             setLoading,
             setSettings,

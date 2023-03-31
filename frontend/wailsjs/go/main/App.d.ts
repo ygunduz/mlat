@@ -10,6 +10,8 @@ export function ReloadData():Promise<main.Container>;
 
 export function SelectFile():Promise<main.Container>;
 
+export function UpdateChannel(arg1:main.Channel):Promise<main.Container>;
+
 export function UpdateDataChannel(arg1:main.UpdateDataChannel):Promise<main.Container>;
 
 export function UpdateReceiver(arg1:main.Receiver):Promise<main.Container>;

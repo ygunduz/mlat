@@ -31,9 +31,10 @@ export const MainLayout = () => {
                           checked={pathname === '/transmitters'} className="mr-2"/>
             <ToggleButton onLabel="Transponders" offLabel="Transponders" onChange={() => navigate('/transponders')}
                           checked={pathname === '/transponders'} className="mr-2"/>
-            <ToggleButton onLabel="Data Processing" offLabel="Data Processing"
-                          onChange={() => navigate('/data-processing')}
+            <ToggleButton onLabel="Data Processing" offLabel="Data Processing" onChange={() => navigate('/data-processing')}
                           checked={pathname === '/data-processing'} className="mr-2"/>
+            <ToggleButton onLabel="Channels" offLabel="Channels" onChange={() => navigate('/channels')}
+                          checked={pathname === '/channels'} className="mr-2"/>
         </Fragment>
     );
 

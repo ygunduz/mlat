@@ -5,11 +5,98 @@ import (
 	"io"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 )
 
 func nanosToSeconds(nanos float64) float64 {
 	return nanos / 1000000000
+}
+
+func findCom(comId string, coms *coms) interface{} {
+	for _, com := range coms.Udp {
+		if com.Id == comId {
+			return com
+		}
+	}
+	for _, com := range coms.TcpClient {
+		if com.Id == comId {
+			return com
+		}
+	}
+	for _, com := range coms.TcpServer {
+		if com.Id == comId {
+			return com
+		}
+	}
+	return nil
+}
+
+func findIp(ipId string, ips *ip) string {
+	for _, ip := range ips.Addresses.Address {
+		if ip.Id == ipId {
+			return ip.Content
+		}
+	}
+	return ""
+}
+
+func findPort(portId string, ports *ports) int {
+	for _, port := range ports.Port {
+		if port.Id == portId {
+			return stringToInt(port.Content)
+		}
+	}
+	return 0
+}
+
+func stringToInt(content string) int {
+	i, err := strconv.Atoi(content)
+	if err != nil {
+		return 0
+	}
+	return i
+}
+
+func (a *App) readChannels(decoder *xml.Decoder, el *xml.StartElement) error {
+	var communications communications
+	if err := decoder.DecodeElement(&communications, el); err != nil {
+		return err
+	}
+	for _, channel := range communications.Out.Channels.Channel {
+		cm := findCom(channel.ComId, &communications.Com)
+		var multicastIp, ipId, portId string
+		var port int
+		if cm != nil {
+			switch cm.(type) {
+			case udp:
+				udp := cm.(udp)
+				ipId = udp.IPId
+				portId = udp.PortId
+				multicastIp = findIp(udp.IPId, &communications.Ip)
+				port = findPort(udp.PortId, &communications.Ip.Ports)
+			case tcpClient:
+				tcpClient := cm.(tcpClient)
+				ipId = tcpClient.IPId
+				portId = tcpClient.PortId
+				multicastIp = findIp(tcpClient.IPId, &communications.Ip)
+				port = findPort(tcpClient.PortId, &communications.Ip.Ports)
+			default:
+				continue
+			}
+			a.container.Channels = append(a.container.Channels, Channel{
+				Id:          channel.Id,
+				Name:        channel.Name,
+				ComId:       channel.ComId,
+				IPId:        ipId,
+				MulticastIp: multicastIp,
+				PortId:      portId,
+				Port:        port,
+			})
+		}
+	}
+
+	return nil
 }
 
 func (a *App) readDataProcessing(decoder *xml.Decoder, el *xml.StartElement) error {
@@ -108,6 +195,7 @@ func (a *App) readFileContents(path string) error {
 		Transmitters: make([]Transmitter, 0),
 		Transponders: make([]Transponder, 0),
 		DataChannels: make([]DataChannel, 0),
+		Channels:     make([]Channel, 0),
 	}
 	for {
 		token, err := decoder.Token()
@@ -147,6 +235,12 @@ func (a *App) readFileContents(path string) error {
 				continue
 			} else if v.Name.Local == "DataProcessing" {
 				err := a.readDataProcessing(decoder, &v)
+				if err != nil {
+					return err
+				}
+				continue
+			} else if v.Name.Local == "Communications" {
+				err := a.readChannels(decoder, &v)
 				if err != nil {
 					return err
 				}
