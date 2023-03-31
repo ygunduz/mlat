@@ -6,25 +6,26 @@ function fallbackCopyTextToClipboard(text) {
     textArea.select();
 
     try {
-        return  document.execCommand("copy");
+        const result = document.execCommand("copy");
+        document.body.removeChild(textArea);
+        return result;
     } catch (err) {
+        document.body.removeChild(textArea);
         return false;
     }
-
-    document.body.removeChild(textArea);
 }
 
 export const copyTextToClipboard = (text) => {
     return new Promise((resolve, reject) => {
         if (!navigator.clipboard) {
-            fallbackCopyTextToClipboard(text);
+            resolve(fallbackCopyTextToClipboard(text));
             return;
         }
         navigator?.clipboard?.writeText(text).then(
             function() {
                 resolve(true);
             },
-            function(err) {
+            function() {
                 reject(false);
             }
         )
