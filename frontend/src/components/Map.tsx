@@ -14,7 +14,7 @@ import {useNavigate} from "react-router-dom";
 import {AreaType, GetAreas} from "../helpers/AreaHelpers";
 import {SceneMode} from "cesium";
 import MapLegent from "./MapLegent";
-import useClipboard from 'react-hook-clipboard'
+import {copyTextToClipboard} from "../helpers";
 
 const colors = {
     receiver: Cesium.Color.fromCssColorString('rgb(255,0,0)'),
@@ -27,7 +27,6 @@ const colors = {
 const pinBuilder = new Cesium.PinBuilder();
 
 export default function Map() {
-    const [clipboard, copyToClipboard] = useClipboard()
     const mapRef = useRef<CesiumComponentRef<Cesium.Viewer>>(null);
     const entityRef = useRef<CesiumComponentRef<Cesium.Entity>>(null);
     const positionRef = useRef<string>(null);
@@ -101,8 +100,11 @@ export default function Map() {
     const handlePositionPick = useCallback((e) => {
         if (e.key === 'p' && positionRef.current) {
             const position = positionRef.current;
-            copyToClipboard(position);
-            toast.showInfo("Position picked: " + positionRef.current);
+            copyTextToClipboard(position).then(() => {
+                toast.showInfo("Position picked: " + positionRef.current);
+            }).catch(err => {
+                toast.showError("Position cannot be copied to clipboard.");
+            })
         }
     }, [positionRef, toast])
 
@@ -192,7 +194,6 @@ export default function Map() {
             scene.globe.ellipsoid
         );
         if (cartesian) {
-            console.log(cartesian)
             const cartographic = Cesium.Cartographic.fromCartesian(
                 cartesian
             );
@@ -259,6 +260,7 @@ export default function Map() {
                 areas={areas}
                 selectedTransmitters={selectedTransmitters}
                 selectedTransponders={selectedTransponders}
+                selectedReceivers={selectedReceivers}
                 selectedAreas={selectedAreas}
                 setSelectedAreas={setSelectedAreas}
                 setSelectedTransmitters={setSelectedTransmitters}

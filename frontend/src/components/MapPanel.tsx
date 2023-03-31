@@ -14,6 +14,7 @@ interface IMapPanelProps {
     areas: AreaType[] | undefined,
     selectedTransmitters: Transmitter[] | undefined,
     selectedTransponders: Transponder[] | undefined,
+    selectedReceivers: Receiver[] | undefined,
     selectedAreas: AreaType[] | undefined,
     setSelectedReceivers: (receivers: Receiver[]) => void,
     setSelectedTransmitters: (transmitters: Transmitter[]) => void,
@@ -30,6 +31,7 @@ export default function MapPanel(props: IMapPanelProps) {
         selectedTransmitters,
         selectedTransponders,
         selectedAreas,
+        selectedReceivers,
         setSelectedReceivers,
         setSelectedTransmitters,
         setSelectedTransponders,
@@ -44,6 +46,22 @@ export default function MapPanel(props: IMapPanelProps) {
     }
 
     return <Accordion activeIndex={0}>
+        <AccordionTab header="Receivers">
+            <DataTable value={receivers} selectionMode='multiple'
+                       selection={selectedReceivers}
+                       size="small"
+                       scrollHeight={'350px'}
+                       onSelectionChange={(e) => {
+                           setSelectedTransmitters([]);
+                           setSelectedTransponders([]);
+                           // @ts-ignore
+                           setSelectedReceivers(e.value);
+                       }}
+                       dataKey="id" tableStyle={{maxWidth: '250px'}}>
+                <Column selectionMode="multiple" headerStyle={{width: '2rem'}} style={{width: 20}}></Column>
+                <Column field="id" header="Transmitter Id" style={{width: 150}}></Column>
+            </DataTable>
+        </AccordionTab>
         <AccordionTab header="Transmitters">
             <DataTable value={transmitters} selectionMode='radiobutton'
                        selection={selectedTransmitters}
