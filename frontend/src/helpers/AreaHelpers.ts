@@ -121,10 +121,10 @@ export const GetAreas = () : Promise<Array<AreaType | null>> => {
             try {
                 resolve(processAreas(areas.area))
             } catch (e) {
-                reject(e)
+                reject("Area configuration error")
             }
-        }).catch((err) => {
-            reject(err)
+        }).catch(() => {
+            reject("Area configuration error")
         })
     })
 }

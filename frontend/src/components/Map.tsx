@@ -73,7 +73,7 @@ export default function Map() {
     }, [])
 
     useEffect(() => {
-        if (mapRef.current?.cesiumElement) {
+        if (mapRef.current?.cesiumElement?.dataSources) {
             if (selectedAreas.length === 0) {
                 mapRef.current.cesiumElement.dataSources.removeAll(true)
             } else {
@@ -108,15 +108,19 @@ export default function Map() {
         }
     }, [positionRef, toast])
 
-    const reloadData = useCallback(() => {
+    const reloadData = () => {
         setLoading(true);
-        ReloadData().then((result) => {
-            setContentLoaded(result);
+        Promise.all([ReloadData(), GetAreas()]).then((result) => {
+            setContentLoaded(result[0]);
+            setAreas(result[1]);
+            if(selectedAreas.length > 0) {
+                setSelectedAreas(result[1].filter(a => selectedAreas.map(sa => sa.id).includes(a.id)));
+            }
         }).catch(err => {
             toast.showError(err);
             setLoading(false);
         });
-    }, [setLoading, setContentLoaded])
+    }
 
     const onBackClick = useCallback(() => {
         navigate(-1);
@@ -213,7 +217,7 @@ export default function Map() {
             entity.label.text =
                 `Lat: ${`${latitudeString}`}\u00B0` +
                 `\nLon: ${`${longitudeString}`}\u00B0`;
-            positionRef.current = `<Latitude>${latitudeString}</Latitude>\n<Longitude>${longitudeString}</Longitude>`;
+            positionRef.current = `<Lat>${latitudeString}</Lat>\n<Lon>${longitudeString}</Lon>`;
         } else {
             // @ts-ignore
             entityRef.current.cesiumElement.label.show = false;
