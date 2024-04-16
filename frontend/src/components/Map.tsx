@@ -12,7 +12,7 @@ import Transmitter = main.Transmitter;
 import Transponder = main.Transponder;
 import {useNavigate} from "react-router-dom";
 import {AreaType, GetAreas} from "../helpers/AreaHelpers";
-import {SceneMode} from "cesium";
+import {SceneMode, ArcGisMapServerImageryProvider} from "cesium";
 import MapLegent from "./MapLegent";
 import {copyTextToClipboard} from "../helpers";
 

@@ -5,11 +5,12 @@ import (
 	"encoding/xml"
 	"errors"
 	"fmt"
-	"github.com/beevik/etree"
-	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"log"
 	"os"
 	"strings"
+
+	"github.com/beevik/etree"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // App struct
@@ -200,8 +201,8 @@ func (a *App) UpdateReceiver(receiverJson Receiver) (Container, error) {
 			return errors.New("receiver element not found")
 		}
 		fmt.Println(receiverJson.CableLengthA, receiverJson.CableLengthB)
-		receiver.FindElement("DataLink/Dual/A/AddDelaySSR").SetText(fmt.Sprintf("%.2f", secondsToNanos(receiverJson.CableLengthA/a.settings.LightSpeed)))
-		receiver.FindElement("DataLink/Dual/B/AddDelaySSR").SetText(fmt.Sprintf("%.2f", secondsToNanos(receiverJson.CableLengthB/a.settings.LightSpeed)))
+		receiver.FindElement("DataLink/Dual/A/AddDelaySSR").SetText(fmt.Sprintf("%.2f", receiverJson.CableLengthA))
+		receiver.FindElement("DataLink/Dual/B/AddDelaySSR").SetText(fmt.Sprintf("%.2f", receiverJson.CableLengthB))
 		return updateSite(receiverJson.Site, document)
 	})
 }

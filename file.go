@@ -166,8 +166,8 @@ func (a *App) readReceivers(decoder *xml.Decoder, el *xml.StartElement) error {
 		receiver.DataLink.Dual.A.AddDelaySSR,
 		receiver.DataLink.Dual.B.AddDelaySSR,
 		s,
-		nanosToSeconds(receiver.DataLink.Dual.A.AddDelaySSR) * a.settings.LightSpeed,
-		nanosToSeconds(receiver.DataLink.Dual.B.AddDelaySSR) * a.settings.LightSpeed,
+		receiver.DataLink.Dual.A.AddDelaySSR,
+		receiver.DataLink.Dual.B.AddDelaySSR,
 	})
 	return nil
 }
