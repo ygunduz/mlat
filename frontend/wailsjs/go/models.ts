@@ -454,6 +454,7 @@ export namespace main {
 	    site?: Site;
 	    cableLengthA: number;
 	    cableLengthB: number;
+	    disabledAreaId: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new Receiver(source);
@@ -468,6 +469,7 @@ export namespace main {
 	        this.site = this.convertValues(source["site"], Site);
 	        this.cableLengthA = source["cableLengthA"];
 	        this.cableLengthB = source["cableLengthB"];
+	        this.disabledAreaId = source["disabledAreaId"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
@@ -515,6 +517,7 @@ export namespace main {
 	    transponders: Transponder[];
 	    dataChannels: DataChannel[];
 	    channels: Channel[];
+	    areas: Area[];
 	
 	    static createFrom(source: any = {}) {
 	        return new Container(source);
@@ -528,6 +531,7 @@ export namespace main {
 	        this.transponders = this.convertValues(source["transponders"], Transponder);
 	        this.dataChannels = this.convertValues(source["dataChannels"], DataChannel);
 	        this.channels = this.convertValues(source["channels"], Channel);
+	        this.areas = this.convertValues(source["areas"], Area);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
@@ -570,18 +574,6 @@ export namespace main {
 	
 	
 	
-	export class Settings {
-	    lightSpeed: number;
-	
-	    static createFrom(source: any = {}) {
-	        return new Settings(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.lightSpeed = source["lightSpeed"];
-	    }
-	}
 	
 	
 	

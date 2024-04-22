@@ -6,10 +6,6 @@ export function GetAreas() {
   return window['go']['main']['App']['GetAreas']();
 }
 
-export function GetSettings() {
-  return window['go']['main']['App']['GetSettings']();
-}
-
 export function ReloadData() {
   return window['go']['main']['App']['ReloadData']();
 }
@@ -28,10 +24,6 @@ export function UpdateDataChannel(arg1) {
 
 export function UpdateReceiver(arg1) {
   return window['go']['main']['App']['UpdateReceiver'](arg1);
-}
-
-export function UpdateSettings(arg1) {
-  return window['go']['main']['App']['UpdateSettings'](arg1);
 }
 
 export function UpdateTransmitter(arg1) {

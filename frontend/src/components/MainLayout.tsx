@@ -40,7 +40,7 @@ export const MainLayout = () => {
 
     const endContent = (
         <Fragment>
-            <Button icon="pi pi-cog" className="p-button-danger mr-2" onClick={() => navigate('/settings')}/>
+            {/*<Button icon="pi pi-cog" className="p-button-danger mr-2" onClick={() => navigate('/settings')}/>*/}
             <Button icon="pi pi-globe" className="p-button-success mr-2" onClick={() => navigate('/map')}/>
             <Button icon="pi pi-refresh" className="p-button-info" onClick={reloadData}/>
         </Fragment>

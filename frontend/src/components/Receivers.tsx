@@ -5,6 +5,7 @@ import {ColumnGroup} from "primereact/columngroup";
 import {Row} from "primereact/row";
 import {UpdateReceiver} from "../../wailsjs/go/main/App";
 import {useDataTable} from "../hooks/useDataTable";
+import {Dropdown} from "primereact/dropdown";
 
 const delayTemplateA = (rowData) => {
     return rowData.addDelaySSRA;
@@ -15,7 +16,7 @@ const delayTemplateB = (rowData) => {
 }
 
 export default function Receivers() {
-    const { receivers, toast, setLoading, setContentLoaded, sameLocationReceivers, settings } = useAppContext();
+    const { receivers, areas, toast, setLoading, setContentLoaded, sameLocationReceivers } = useAppContext();
     const { filters, scrollHeight, numberEditor, header } = useDataTable();
 
     const onRowEditComplete = (e) => {
@@ -28,6 +29,7 @@ export default function Receivers() {
             addDelaySSRB: newData.addDelaySSRB,
             cableLengthA: newData.cableLengthA,
             cableLengthB: newData.cableLengthB,
+            disabledAreaId: newData.disabledAreaId || null,
             site: {
                 id: newData.site.id,
                 description: newData.site.description,
@@ -49,7 +51,7 @@ export default function Receivers() {
     const headerGroup = (
         <ColumnGroup>
             <Row>
-                <Column header="" colSpan={6}/>
+                <Column header="" colSpan={7}/>
                 <Column header="Add Delay SSR" colSpan={2}/>
                 <Column header=""/>
             </Row>
@@ -60,6 +62,7 @@ export default function Receivers() {
                 <Column header="Latitude"/>
                 <Column header="Longitude"/>
                 <Column header="Height"/>
+                <Column header="Disabled Area"/>
                 <Column header="A"/>
                 <Column header="B"/>
                 <Column header=""/>
@@ -70,6 +73,18 @@ export default function Receivers() {
         return {
             'bg-red-100': sameLocationReceivers.includes(data.id)
         };
+    };
+
+    const areaEditor = (options) => {
+        return (
+            <Dropdown
+                value={options.value}
+                options={areas.map(a => a.id)}
+                onChange={(e) => options.editorCallback(e.value)}
+                showClear={true}
+                placeholder="Select"
+            />
+        );
     };
 
     return (
@@ -84,6 +99,7 @@ export default function Receivers() {
                 <Column field="site.latitude" header="Latitude" editor={(options) => numberEditor(options)}></Column>
                 <Column field="site.longitude" header="Longitude" editor={(options) => numberEditor(options)}></Column>
                 <Column field="site.height" header="Height" editor={(options) => numberEditor(options)}></Column>
+                <Column field="disabledAreaId" header="Disable Area" editor={(options) => areaEditor(options)}></Column>
                 <Column field="cableLengthA" body={delayTemplateA} header="A" editor={(options) => numberEditor(options)}></Column>
                 <Column field="cableLengthB" body={delayTemplateB} header="B" editor={(options) => numberEditor(options)}></Column>
                 <Column rowEditor headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }} style={{width: '10%'}}></Column>

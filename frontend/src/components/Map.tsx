@@ -12,7 +12,7 @@ import Transmitter = main.Transmitter;
 import Transponder = main.Transponder;
 import {useNavigate} from "react-router-dom";
 import {AreaType, GetAreas} from "../helpers/AreaHelpers";
-import {SceneMode, ArcGisMapServerImageryProvider} from "cesium";
+import {SceneMode, IonImageryProvider} from "cesium";
 import MapLegent from "./MapLegent";
 import {copyTextToClipboard} from "../helpers";
 
@@ -25,6 +25,8 @@ const colors = {
 }
 
 const pinBuilder = new Cesium.PinBuilder();
+
+const imagery = new IonImageryProvider({assetId:3954, accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzMDJlYWJmNS05NTQ4LTQ2NTctODc3Yi1kMTJhZDU4MzI0YzciLCJpZCI6MTI5NDk3LCJpYXQiOjE2NzkzMTYyMzZ9.ue9eyaNX1MqGVpEK0cq0eGebGFf1lLtM5ZkMhMhhxUg'})
 
 export default function Map() {
     const mapRef = useRef<CesiumComponentRef<Cesium.Viewer>>(null);
@@ -279,6 +281,7 @@ export default function Map() {
             navigationHelpButton={false}
             homeButton={false}
             fullscreenButton={false}
+            imageryProvider={imagery}
             sceneMode={SceneMode.SCENE2D}>
             {renderReceivers()}
             {renderTransmitters()}

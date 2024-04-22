@@ -7,6 +7,7 @@ type Container struct {
 	Transponders []Transponder `json:"transponders"`
 	DataChannels []DataChannel `json:"dataChannels"`
 	Channels     []Channel     `json:"channels"`
+	Areas        []Area        `json:"areas"`
 }
 
 type Site struct {
@@ -18,13 +19,14 @@ type Site struct {
 }
 
 type Receiver struct {
-	Id           string  `json:"id"`
-	SiteId       string  `json:"siteId"`
-	AddDelaySSRA float64 `json:"addDelaySSRA"`
-	AddDelaySSRB float64 `json:"addDelaySSRB"`
-	Site         *Site   `json:"site"`
-	CableLengthA float64 `json:"cableLengthA"`
-	CableLengthB float64 `json:"cableLengthB"`
+	Id             string  `json:"id"`
+	SiteId         string  `json:"siteId"`
+	AddDelaySSRA   float64 `json:"addDelaySSRA"`
+	AddDelaySSRB   float64 `json:"addDelaySSRB"`
+	Site           *Site   `json:"site"`
+	CableLengthA   float64 `json:"cableLengthA"`
+	CableLengthB   float64 `json:"cableLengthB"`
+	DisabledAreaId string  `json:"disabledAreaId"`
 }
 
 type Transmitter struct {

@@ -3,8 +3,6 @@ import {Column} from 'primereact/column';
 import {useAppContext} from "../context/AppContext";
 import {useDataTable} from "../hooks/useDataTable";
 import {useMemo} from "react";
-import {Tag} from "primereact/tag";
-import {InputSwitch} from "primereact/inputswitch";
 import {UpdateDataChannel} from "../../wailsjs/go/main/App";
 import {Checkbox} from "primereact/checkbox";
 

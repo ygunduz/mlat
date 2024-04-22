@@ -2,11 +2,8 @@ package main
 
 import (
 	"context"
-	"encoding/xml"
 	"errors"
 	"fmt"
-	"log"
-	"os"
 	"strings"
 
 	"github.com/beevik/etree"
@@ -18,7 +15,7 @@ type App struct {
 	ctx          context.Context
 	selectedFile string
 	container    *Container
-	settings     Settings
+	//settings     Settings
 }
 
 // NewApp creates a new App application struct
@@ -30,15 +27,15 @@ func NewApp() *App {
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
-	data, err := os.ReadFile("settings.xml")
-	if err != nil {
-		log.Fatal(err)
-	}
-	var settings Settings
-	if err := xml.Unmarshal(data, &settings); err != nil {
-		log.Fatal(err)
-	}
-	a.settings = settings
+	//data, err := os.ReadFile("settings.xml")
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//var settings Settings
+	//if err := xml.Unmarshal(data, &settings); err != nil {
+	//	log.Fatal(err)
+	//}
+	//a.settings = settings
 }
 
 func (a *App) updateNode(file string, cb func(document *etree.Document) error) (Container, error) {
@@ -103,26 +100,26 @@ func updateSite(siteJson *Site, document *etree.Document) error {
 	return nil
 }
 
-func secondsToNanos(seconds float64) float64 {
-	return seconds * 1000000000
-}
+//func secondsToNanos(seconds float64) float64 {
+//	return seconds * 1000000000
+//}
 
-func (a *App) GetSettings() Settings {
-	return a.settings
-}
+//func (a *App) GetSettings() Settings {
+//	return a.settings
+//}
 
-func (a *App) UpdateSettings(settings Settings) Settings {
-	data, err := xml.MarshalIndent(settings, "", "  ")
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = os.WriteFile("settings.xml", data, 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
-	a.settings = settings
-	return settings
-}
+//func (a *App) UpdateSettings(settings Settings) Settings {
+//	data, err := xml.MarshalIndent(settings, "", "  ")
+//	if err != nil {
+//		log.Fatal(err)
+//	}
+//	err = os.WriteFile("settings.xml", data, 0644)
+//	if err != nil {
+//		log.Fatal(err)
+//	}
+//	a.settings = settings
+//	return settings
+//}
 
 func (a *App) SelectFile() (Container, error) {
 	file, err := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{DefaultFilename: "mss.cfg", Filters: []runtime.FileFilter{
@@ -203,6 +200,24 @@ func (a *App) UpdateReceiver(receiverJson Receiver) (Container, error) {
 		fmt.Println(receiverJson.CableLengthA, receiverJson.CableLengthB)
 		receiver.FindElement("DataLink/Dual/A/AddDelaySSR").SetText(fmt.Sprintf("%.2f", receiverJson.CableLengthA))
 		receiver.FindElement("DataLink/Dual/B/AddDelaySSR").SetText(fmt.Sprintf("%.2f", receiverJson.CableLengthB))
+		if len(receiverJson.DisabledAreaId) != 0 {
+			element := receiver.FindElement("DisabledAreaId")
+			if element != nil {
+				element.SetText(receiverJson.DisabledAreaId)
+			} else {
+				receiver.FindElement("DataLink").SetTail("\n\t\t\t\t\t\t")
+				newElement := etree.NewElement("DisabledAreaId")
+				newElement.SetText(receiverJson.DisabledAreaId)
+				receiver.AddChild(newElement)
+				newElement.SetTail("\n\t\t\t\t\t")
+			}
+		} else {
+			element := receiver.FindElement("DisabledAreaId")
+			if element != nil {
+				receiver.RemoveChild(element)
+				receiver.FindElement("DataLink").SetTail("\n\t\t\t\t\t")
+			}
+		}
 		return updateSite(receiverJson.Site, document)
 	})
 }

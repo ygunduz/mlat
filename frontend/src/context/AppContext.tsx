@@ -1,14 +1,12 @@
-import {createContext, ReactNode, useContext, useEffect, useReducer} from "react";
+import {createContext, ReactNode, useContext, useReducer} from "react";
 import {Toast} from "../helpers/Toast";
 import {main} from "../../wailsjs/go/models";
-import {GetSettings} from "../../wailsjs/go/main/App";
 import {AreaType} from "../helpers/AreaHelpers";
 import Container = main.Container;
 import Site = main.Site;
 import Receiver = main.Receiver;
 import Transmitter = main.Transmitter;
 import Transponder = main.Transponder;
-import Settings = main.Settings;
 import DataChannel = main.DataChannel;
 import Channel = main.Channel;
 
@@ -24,8 +22,8 @@ interface IAppContext {
     sites: Site[] | undefined,
     dataChannels: DataChannel[] | undefined,
     channels: Channel[] | undefined,
-    settings: Settings | undefined,
-    setSettings: (settings: Settings) => void,
+    // settings: Settings | undefined,
+    // setSettings: (settings: Settings) => void,
     toast: Toast,
     areas: Array<AreaType | null> | undefined,
     setAreas: (areas: Array<AreaType | null> | undefined) => void
@@ -112,17 +110,8 @@ export const AppProvider = ({children, toast}: AppProviderProps) => {
         (prev: any, next: any) => {
             return {...prev, ...next};
         },
-        {loading: true, contentLoaded: false}
+        {loading: false, contentLoaded: false}
     );
-
-    useEffect(() => {
-        GetSettings().then(settings => {
-            updateValue({settings, loading: false});
-        }).catch(err => {
-            toast.showError(err);
-            setLoading(false);
-        });
-    }, []);
 
     const setLoading = (loading: boolean) => {
         updateValue({loading});
@@ -132,9 +121,9 @@ export const AppProvider = ({children, toast}: AppProviderProps) => {
         updateValue({areas, loading: false});
     }
 
-    const setSettings = (settings: Settings) => {
-        updateValue({settings, loading: false});
-    }
+    // const setSettings = (settings: Settings) => {
+    //     updateValue({settings, loading: false});
+    // }
 
     const setContentLoaded = (container: Container) => {
         const receivers = findSameLocationReceivers(container.receivers);
@@ -153,6 +142,7 @@ export const AppProvider = ({children, toast}: AppProviderProps) => {
             dataChannels: container.dataChannels,
             channels: container.channels,
             ignoredReceivers: igrnoredReceivers,
+            areas: container.areas.map(a => ({id: a.id})),
             transmitterHasReceiver,
             transponderHasReceiver
         });
@@ -167,7 +157,7 @@ export const AppProvider = ({children, toast}: AppProviderProps) => {
             transmitters: values.transmitters,
             transponders: values.transponders,
             sites: values.sites,
-            settings: values.settings,
+            // settings: values.settings,
             dataChannels: values.dataChannels,
             sameLocationReceivers: values.sameLocationReceivers,
             areas: values.areas,
@@ -177,7 +167,7 @@ export const AppProvider = ({children, toast}: AppProviderProps) => {
             channels: values.channels,
             setContentLoaded,
             setLoading,
-            setSettings,
+            // setSettings,
             setAreas,
             toast
         }}>

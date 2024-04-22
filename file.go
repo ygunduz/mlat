@@ -168,6 +168,7 @@ func (a *App) readReceivers(decoder *xml.Decoder, el *xml.StartElement) error {
 		s,
 		receiver.DataLink.Dual.A.AddDelaySSR,
 		receiver.DataLink.Dual.B.AddDelaySSR,
+		receiver.DisabledAreaId,
 	})
 	return nil
 }
@@ -179,6 +180,14 @@ func (a *App) readSites(decoder *xml.Decoder, el *xml.StartElement) error {
 	}
 	a.container.Sites = append(a.container.Sites, Site{site.Id, site.Description, site.Latitude, site.Longitude, site.Height})
 	return nil
+}
+
+func (a *App) readAreas() error {
+	areas, err := decodeAreas(a.selectedFile)
+	for _, area := range areas.Area {
+		a.container.Areas = append(a.container.Areas, area)
+	}
+	return err
 }
 
 func (a *App) readFileContents(path string) error {
@@ -196,6 +205,7 @@ func (a *App) readFileContents(path string) error {
 		Transponders: make([]Transponder, 0),
 		DataChannels: make([]DataChannel, 0),
 		Channels:     make([]Channel, 0),
+		Areas:        make([]Area, 0),
 	}
 	for {
 		token, err := decoder.Token()
@@ -248,7 +258,7 @@ func (a *App) readFileContents(path string) error {
 			}
 		}
 	}
-	return nil
+	return a.readAreas()
 }
 
 func findSite(sites []Site, id string) *Site {

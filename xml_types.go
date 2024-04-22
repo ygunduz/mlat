@@ -50,9 +50,10 @@ type coveredReceivers struct {
 }
 
 type receiver struct {
-	Id       string   `xml:"id,attr"`
-	SiteId   string   `xml:"SiteId"`
-	DataLink dataLink `xml:"DataLink"`
+	Id             string   `xml:"id,attr"`
+	SiteId         string   `xml:"SiteId"`
+	DataLink       dataLink `xml:"DataLink"`
+	DisabledAreaId string   `xml:"DisabledAreaId"`
 }
 
 type dataLink struct {

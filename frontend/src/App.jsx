@@ -8,12 +8,8 @@ import {MainLayout} from "./components/MainLayout";
 import Receivers from "./components/Receivers";
 import TransmitterTransponder from "./components/TransmitterTransponder";
 import DataProcessing from "./components/DataProcessing";
-import Settings from "./components/Settings";
 import Map from "./components/Map";
 import Channels from "./components/Channels";
-import { Ion } from "cesium";
-
-Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzMDJlYWJmNS05NTQ4LTQ2NTctODc3Yi1kMTJhZDU4MzI0YzciLCJpZCI6MTI5NDk3LCJpYXQiOjE2NzkzMTYyMzZ9.ue9eyaNX1MqGVpEK0cq0eGebGFf1lLtM5ZkMhMhhxUg';
 
 function App() {
     const { loading } = useAppContext()
@@ -30,7 +26,7 @@ function App() {
                         <Route path="/transponders" element={<TransmitterTransponder type="transponder" />} />
                         <Route path="/data-processing" element={<DataProcessing />} />
                         <Route path="/channels" element={<Channels />} />
-                        <Route path="/settings" element={<Settings />} />
+                        {/*<Route path="/settings" element={<Settings />} />*/}
                     </Route>
                     <Route path="/map" element={<Map />} />
                 </Routes>

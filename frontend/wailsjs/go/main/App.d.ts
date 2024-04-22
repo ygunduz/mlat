@@ -4,8 +4,6 @@ import {main} from '../models';
 
 export function GetAreas():Promise<main.Areas>;
 
-export function GetSettings():Promise<main.Settings>;
-
 export function ReloadData():Promise<main.Container>;
 
 export function SelectFile():Promise<main.Container>;
@@ -15,8 +13,6 @@ export function UpdateChannel(arg1:main.Channel):Promise<main.Container>;
 export function UpdateDataChannel(arg1:main.UpdateDataChannel):Promise<main.Container>;
 
 export function UpdateReceiver(arg1:main.Receiver):Promise<main.Container>;
-
-export function UpdateSettings(arg1:main.Settings):Promise<main.Settings>;
 
 export function UpdateTransmitter(arg1:main.Transmitter):Promise<main.Container>;
 
