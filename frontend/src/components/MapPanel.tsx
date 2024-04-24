@@ -59,7 +59,7 @@ export default function MapPanel(props: IMapPanelProps) {
                        }}
                        dataKey="id" tableStyle={{maxWidth: '250px'}}>
                 <Column selectionMode="multiple" headerStyle={{width: '2rem'}} style={{width: 20}}></Column>
-                <Column field="id" header="Transmitter Id" style={{width: 150}}></Column>
+                <Column field="id" header="Receiver Id" style={{width: 150}}></Column>
             </DataTable>
         </AccordionTab>
         <AccordionTab header="Transmitters">
