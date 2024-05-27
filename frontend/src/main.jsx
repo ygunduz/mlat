@@ -8,7 +8,12 @@ import "primereact/resources/themes/rhea/theme.css";
 import "primereact/resources/primereact.min.css";
 //icons
 import "primeicons/primeicons.css";
+
 import "primeflex/primeflex.css";
+import "leaflet/dist/leaflet.css"
+import * as L from "leaflet";
+import "@geoman-io/leaflet-geoman-free";
+import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import "./style.css";
 import App from "./App.jsx";
 import ToastProvider from "./ToastProvider";

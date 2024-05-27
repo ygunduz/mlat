@@ -9,21 +9,22 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@geoman-io/leaflet-geoman-free": "^2.16.0",
     "@turf/turf": "^6.5.0",
-    "cesium": "^1.103.0",
+    "leaflet": "^1.9.4",
     "primeflex": "^3.3.0",
     "primeicons": "^6.0.1",
     "primereact": "^9.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.9.0",
-    "resium": "^1.16.1"
+    "react-leaflet": "^4.2.1",
+    "react-router-dom": "^6.9.0"
   },
   "devDependencies": {
+    "@types/leaflet": "^1.9.12",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.0.1",
-    "vite": "^3.0.7",
-    "vite-plugin-cesium": "^1.2.22"
+    "vite": "^3.0.7"
   }
 }
