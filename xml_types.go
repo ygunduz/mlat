@@ -3,6 +3,25 @@ package main
 type dataProcessing struct {
 	Id           string       `xml:"id,attr"`
 	DataChannels dataChannels `xml:"DataChannels"`
+	Calibration  calibration  `xml:"Calibration"`
+}
+
+type calibration struct {
+	OverDeterm overDeterm `xml:"OverDeterm"`
+	RefTran    refTran    `xml:"RefTran"`
+	Height     height     `xml:"Height"`
+}
+
+type overDeterm struct {
+	Enabled bool `xml:"Enabled"`
+}
+
+type refTran struct {
+	Enabled bool `xml:"Enabled"`
+}
+
+type height struct {
+	Enabled bool `xml:"Enabled"`
 }
 
 type dataChannels struct {

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/beevik/etree"
@@ -225,6 +226,10 @@ func (a *App) UpdateReceiver(receiverJson Receiver) (Container, error) {
 func (a *App) UpdateDataChannel(channel UpdateDataChannel) (Container, error) {
 	return a.updateNode(a.selectedFile, func(document *etree.Document) error {
 		for _, item := range channel.Items {
+			if channel.Id == "OverDeterm" || channel.Id == "RefTran" || channel.Id == "Height" {
+				document.FindElement("//DataProcessing[@id='" + item.Key + "']/Calibration/" + channel.Id + "/Enabled").SetText(strconv.FormatBool(item.Value))
+				continue
+			}
 			for _, element := range document.FindElements("//DataProcessing[@id='" + item.Key + "']/DataChannels/DataChannel/ReceiverId") {
 				if strings.TrimSpace(element.Text()) == channel.Id {
 					value := "0"

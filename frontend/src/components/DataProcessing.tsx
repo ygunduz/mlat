@@ -14,6 +14,18 @@ export default function DataProcessing() {
         const data = [];
         dataChannels.forEach((dataChannel, index) => {
             if (index === 0) {
+                data.push({
+                    id: 'OverDeterm',
+                    [dataChannel.id]: dataChannel.overDetermEnabled,
+                })
+                data.push({
+                    id: 'RefTran',
+                    [dataChannel.id]: dataChannel.refTranEnabled,
+                })
+                data.push({
+                    id: 'Height',
+                    [dataChannel.id]: dataChannel.heightEnabled,
+                })
                 dataChannel.items.forEach((item) => {
                     data.push({
                         id: item.receiverId,
@@ -21,8 +33,11 @@ export default function DataProcessing() {
                     })
                 })
             } else {
+                data[0][dataChannel.id] = dataChannel.overDetermEnabled;
+                data[1][dataChannel.id] = dataChannel.refTranEnabled;
+                data[2][dataChannel.id] = dataChannel.heightEnabled;
                 dataChannel.items.forEach((item, i) => {
-                    data[i][dataChannel.id] = item.enabled === 1;
+                    data[i + 3][dataChannel.id] = item.enabled === 1;
                 })
             }
         });

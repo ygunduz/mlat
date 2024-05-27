@@ -111,7 +111,11 @@ func (a *App) readDataProcessing(decoder *xml.Decoder, el *xml.StartElement) err
 			ReceiverId: channel.ReceiverId,
 		})
 	}
-	a.container.DataChannels = append(a.container.DataChannels, DataChannel{dataProcessing.Id, items})
+	a.container.DataChannels = append(a.container.DataChannels, DataChannel{dataProcessing.Id,
+		dataProcessing.Calibration.OverDeterm.Enabled,
+		dataProcessing.Calibration.RefTran.Enabled,
+		dataProcessing.Calibration.Height.Enabled,
+		items})
 	return nil
 }
 

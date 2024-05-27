@@ -320,6 +320,9 @@ export namespace main {
 	}
 	export class DataChannel {
 	    id: string;
+	    overDetermEnabled: boolean;
+	    refTranEnabled: boolean;
+	    heightEnabled: boolean;
 	    items: DataChannelItem[];
 	
 	    static createFrom(source: any = {}) {
@@ -329,6 +332,9 @@ export namespace main {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.id = source["id"];
+	        this.overDetermEnabled = source["overDetermEnabled"];
+	        this.refTranEnabled = source["refTranEnabled"];
+	        this.heightEnabled = source["heightEnabled"];
 	        this.items = this.convertValues(source["items"], DataChannelItem);
 	    }
 	

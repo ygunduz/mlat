@@ -74,8 +74,11 @@ type KeyValueBoolean struct {
 }
 
 type DataChannel struct {
-	Id          string            `json:"id"`
-	DataChannel []DataChannelItem `json:"items"`
+	Id                string            `json:"id"`
+	OverDetermEnabled bool              `json:"overDetermEnabled"`
+	RefTranEnabled    bool              `json:"refTranEnabled"`
+	HeightEnabled     bool              `json:"heightEnabled"`
+	DataChannel       []DataChannelItem `json:"items"`
 }
 
 type DataChannelItem struct {
