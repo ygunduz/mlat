@@ -60,9 +60,9 @@ body {
 
 .map-legend {
     position: absolute;
-    bottom: 55px;
+    bottom: 10px;
     right: 0;
-    height: 140px;
+    height: 100px;
     width: 300px;
     z-index: 1000;
     display: flex;

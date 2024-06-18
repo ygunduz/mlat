@@ -13,14 +13,6 @@ export default function MapLegent() {
                 <div className="legend-color" style={{backgroundColor: '#00FF00E0'}}/>
                 <div className="legend-text">Transponder</div>
             </div>
-            <div className="legend-item">
-                <div className="legend-color" style={{backgroundColor: '#FFFF00E2'}}/>
-                <div className="legend-text">Transmitter & Receiver</div>
-            </div>
-            <div className="legend-item">
-                <div className="legend-color" style={{backgroundColor: '#FF00FFE2'}}/>
-                <div className="legend-text">Transponder & Receiver</div>
-            </div>
         </div>
     )
 }
